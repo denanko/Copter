@@ -1,0 +1,93 @@
+ // This DTS overlay sets up four input and four output pins for use by  
+ // PRU0 via its Enhanced GPIO mode 
+ // Inputs for signals from receiver are:
+ // BB_Header	Register bit	DT Offset	Pinmux mode
+ // P8_15 	R31 bit 15	0x03C		Mode_6
+ // P8_16 	R31 bit 14	0x038		Mode_6
+ // P9_24 	R31 bit 16	0x184		Mode_6
+ // P9_25 	R31 bit 7	0x1AC		Mode_6
+
+ // Outputs, which are references to ESCs are:
+ // BB_Header	Register bit	DT Offset	Pinmux mode
+ // P9_28	R30 bit 3	0x19C		Mode_5
+ // P9_29	R30 bit 1 	0x194		Mode_5
+ // P9_30	R30 bit 2 	0x198		Mode_5
+ // P9_31	R30 bit 0	0x190		Mode_5
+   
+ // Save this file wherever you want (but I recommend /lib/firmware), as  
+ // "PRU-COPTER-00A0.dts".
+   
+ // Compile with:
+ // dtc -O dtb -I dts -o /lib/firmware/PRU-COPTER-00A0.dtbo -b 0 -@ PRU-COPTER-00A0.dts  
+   
+ // You'll have to reboot, after which you can do this as root to activate it:  
+ // echo PRU-COPTER > /sys/devices/bone_capemgr.?/slots  
+ 
+ /dts-v1/;  
+ /plugin/;  
+ 
+ / {  
+   // This determines which boards can use this DTS overlay  
+   compatible = "ti,beaglebone", "ti,beaglebone-green", "ti,beaglebone-black";  
+   
+   // I think part-number is supposed to correspond with the filename,  
+   // so we'd save this as "PRU-COPTER-00A0.dts".  
+   part-number = "PRU-COPTER";  
+   
+   // This always seems to be 00A0, and all the .dtbo files in /lib/firmware  
+   // seem to be named foo-00A0.dtbo, but then are loaded without that suffix.  So
+   // for foo-00A0.dtbo we'd do 'echo foo > /sys/devices/bone_capemgr.?/slots'
+   version = "00A0";
+   
+   // List the pins and resources we'll be using. This table:  
+   // http://elinux.org/Ti_AM33XX_PRUSSv2#Beaglebone_PRU_connections_and_modes  
+   // shows which pins can be used with PRU0 and PRU1 for input and output via  
+   // registers R31 and R30.  
+   // Beware: Many other PRU EGP pins are reserved by HDMI or onboard flash, which  
+   // would need to be disabled first by editing uEnv.txt and rebooting.  
+   exclusive-use =  
+      "P8.15", "P8.16", "P9.24", "P9.25", "P9.28", "P9.29", "P9.30", "P9.31", "pru0";  
+   
+   fragment@0 {  
+    target = <&am33xx_pinmux>;  
+    __overlay__ {  
+      example_pins: pinmux_pru_pru_pins {  
+   
+       // The offset and mode for pins also come from the table linked above.
+       //  
+       // That table gives offset 0x34 for P8_11, and 0x38 for P8_16.
+       // It also shows us we want pinmux mode 5 for output mode,  
+       // and pinmux mode 6 for input mode.
+       // 
+       // Table 9-60 in the TRM: http://www.ti.com/lit/ug/spruh73l/spruh73l.pdf  
+       // helps us calculate the rest of the configuration value.  
+       //  
+       // For outputs, the other fields are all 0, so the value is just 0x06.  
+       //  
+       // For inputs we also set bit 5, yielding  
+       // a value of 0x26. We could also set bits 3 and 4 to enable a pullup  
+       // or pulldown.  
+       pinctrl-single,pins = < 
+	0x3C 	0x26
+	0x38 	0x26
+	0x184 	0x26
+	0x1AC	0x26
+	0x19C	0x06
+	0x194 	0x06
+	0x198	0x06
+	0x190	0x06
+       >;  
+      };  
+    };  
+   };  
+   
+   // This enables the PRU and assigns the GPIO pins to it for use in EGP mode.  
+   fragment@1 {  
+    target = <&pruss>;  
+    __overlay__ {  
+      status = "okay";  
+      pinctrl-names = "default";  
+      pinctrl-0 = <&example_pins>;  
+    };  
+   };  
+ };  
