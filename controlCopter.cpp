@@ -12,8 +12,10 @@
 #include <time.h>
 #include <pthread.h>
 #include <stdint.h>
+#include <chrono> 
 
 using namespace std;
+using namespace std::chrono;
 
 #include "MPU6050_6Axis_MotionApps20.h"
 #include "pid.h"
@@ -26,6 +28,10 @@ MPU6050 mpu;
 
 #include "PruProxy.h"
 
+
+#define DISABLE_MOTORS                  TRUE
+#define EXECUTION_TIME_MEASURMENTS      FALSE
+#define NUMBER_OF_CYCLES                100
 
 // ******************
 // rc functions
@@ -281,17 +287,18 @@ gyroYaw=gyro[0];   gyroPitch=gyro[1]; gyroRoll=-gyro[2];
     motor[MOTOR_FR] = rcthr - roll_output + pitch_output + yaw_output;
     motor[MOTOR_BR] = rcthr - roll_output - pitch_output - yaw_output;
 
-    Pru.Output1 = motor[MOTOR_BL]*200;
-	Pru.Output2 = motor[MOTOR_FL]*200;
-	Pru.Output3 = motor[MOTOR_BR]*200;
-	Pru.Output4 = motor[MOTOR_FR]*200;
 	
-	/*
+#if DISABLE_MOTORS == TRUE
     Pru.Output1 = 1000*200;
 	Pru.Output2 = 1000*200;
 	Pru.Output3 = 1000*200;
 	Pru.Output4 = 1000*200;
-	*/
+#else
+    Pru.Output1 = motor[MOTOR_BL]*200;
+	Pru.Output2 = motor[MOTOR_FL]*200;
+	Pru.Output3 = motor[MOTOR_BR]*200;
+	Pru.Output4 = motor[MOTOR_FR]*200;
+#endif
 	
 	Pru.UpdateOutput();
 
@@ -356,13 +363,31 @@ int main(void)
 	}
     	
 	setup();
-
-	while(1)
+	
+#if EXECUTION_TIME_MEASURMENTS == TRUE	
+	// Get starting timepoint 
+	auto start = high_resolution_clock::now(); 
+	
+	while(LoopCounter < NUMBER_OF_CYCLES)
+#else
+	while(1)	
+#endif
 	{
 		loop();
 		usleep(10);
+#if EXECUTION_TIME_MEASURMENTS == TRUE			
+		LoopCounter++;
+#endif
 	}
-	//loop();
+
+#if EXECUTION_TIME_MEASURMENTS == TRUE		
+	// Get ending timepoint 
+	auto stop = high_resolution_clock::now(); 
+    auto duration = duration_cast<microseconds>(stop - start); 
+  
+    cout << "Time taken by function: "
+         << duration.count() << " microseconds" << endl; 
+#endif
 	
 	return 0;
 }
