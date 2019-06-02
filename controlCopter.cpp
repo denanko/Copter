@@ -13,6 +13,8 @@
 #include <pthread.h>
 #include <stdint.h>
 #include <chrono> 
+#include <ctime>
+#include <fstream>					// Include this to use file streams
 
 using namespace std;
 using namespace std::chrono;
@@ -29,8 +31,9 @@ MPU6050 mpu;
 #include "PruProxy.h"
 
 
+#define ENABLE_LOGGING                  TRUE
 #define DISABLE_MOTORS                  TRUE
-#define EXECUTION_TIME_MEASURMENTS      FALSE
+#define EXECUTION_TIME_MEASURMENTS      TRUE
 #define NUMBER_OF_CYCLES                100
 
 // ******************
@@ -178,8 +181,13 @@ void setup()
 
 
 // ******** Main Loop *********
-void loop () 
-{
+#if ENABLE_LOGGING == TRUE
+void loop (ostream& logFile) {
+    string logData;
+#else
+void loop () {
+#endif
+
 	
  long rcthr, rcyaw, rcpit, rcroll,yaw, pitch, roll;  // Variables to store radio in
   static float yaw_target = 0; 
@@ -193,21 +201,21 @@ void loop ()
   long pitch_output;  
   long roll_output;  
   long yaw_output;  
- 
   uint16_t channels[4];
   long motor[4];
 
-	if(Pru.UpdateInput())
-	{
-		channels[0] = Pru.Input1;
-		channels[1] = Pru.Input2;
-		channels[2] = Pru.Input3; 
-		channels[3] = Pru.Input4;
-	}
-	else
-	{
-		cout << "Pru failed update" << endl;
-	}
+
+    if(Pru.UpdateInput())
+    {
+    	channels[0] = Pru.Input1;
+    	channels[1] = Pru.Input2;
+    	channels[2] = Pru.Input3; 
+    	channels[3] = Pru.Input4;
+    }
+    else
+    {
+    	cout << "Pru failed update" << endl;
+    }
 
   rcthr = channels[2];
   rcyaw = map(channels[0], RC_YAW_MIN, RC_YAW_MAX, -180, 180);
@@ -343,6 +351,21 @@ gyroYaw=gyro[0];   gyroPitch=gyro[1]; gyroRoll=-gyro[2];
   else{
       coutDelay++;
   }*/
+  
+#if ENABLE_LOGGING == TRUE
+  logData  = to_string(rcthr);
+  logData += "\t";
+  logData += to_string(rcpit);  
+  logData += "\t";
+  logData += to_string(rcroll);  
+  logData += "\t";
+  logData += to_string(rcyaw);  
+  logData += "\t";
+  logData += to_string(gyroPitch);
+  logData += "\n"; 
+  
+  logFile << logData;
+#endif
 }
 
 
@@ -364,6 +387,26 @@ int main(void)
     	
 	setup();
 	
+	  
+#if ENABLE_LOGGING == TRUE
+    string location = "Logs//";
+    time_t rawtime;
+    struct tm * timeinfo;
+    char buffer[80];
+
+    time (&rawtime);
+    timeinfo = localtime(&rawtime);
+
+    strftime(buffer,sizeof(buffer),"%d-%m-%Y %H:%M:%S",timeinfo);
+    string title = buffer;
+	string outString = "";
+	ofstream fout(location + title);
+	
+	outString = "t\tCapture\tAGR\tSaturation\tPeleng, grad\tPhase, grad\tU1, мВ\tU2, мВ\tU3, мВ\tU4, mV\tCounter\t\t";
+    fout << outString;
+#endif
+
+	
 #if EXECUTION_TIME_MEASURMENTS == TRUE	
 	// Get starting timepoint 
 	auto start = high_resolution_clock::now(); 
@@ -373,7 +416,11 @@ int main(void)
 	while(1)	
 #endif
 	{
+	#if ENABLE_LOGGING == TRUE
+		loop(fout);
+	#else
 		loop();
+	#endif
 		usleep(10);
 #if EXECUTION_TIME_MEASURMENTS == TRUE			
 		LoopCounter++;
@@ -388,6 +435,8 @@ int main(void)
     cout << "Time taken by function: "
          << duration.count() << " microseconds" << endl; 
 #endif
+	
+	fout.close();
 	
 	return 0;
 }
