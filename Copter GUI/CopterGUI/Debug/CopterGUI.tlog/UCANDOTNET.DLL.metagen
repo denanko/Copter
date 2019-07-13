@@ -1,0 +1,397 @@
+ImageRuntimeVersion: v1.1.4322
+Assembly UcanDotNET, Version=1.1.1.1, Culture=neutral, PublicKeyToken=d953b947bc4020c8: 
+	hash=SHA1, flags=PublicKey
+Assembly mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=None, flags=None
+Assembly Microsoft.VisualBasic, Version=7.0.5000.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a: 
+	hash=None, flags=None
+Assembly System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=None, flags=None
+Assembly System.Data, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=None, flags=None
+Assembly System.Xml, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=None, flags=None
+Class UcanDotNET.USBcanServer: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+    Void .ctor(): PrivateScope, Public, SpecialName, RTSpecialName
+  Interfaces:
+    System.IDisposable
+  Fields:
+    Int32 USBCAN_MAX_MODULES = 64 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_MAX_INSTANCES = 64 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_ANY_MODULE = 255 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_INVALID_HANDLE = 255 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_BAUD_1MBit = 20 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_BAUD_800kBit = 22 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_BAUD_500kBit = 28 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_BAUD_250kBit = 284 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_BAUD_125kBit = 796 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_BAUD_100kBit = 17199 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_BAUD_50kBit = 18223 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_BAUD_20kBit = 21295 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_BAUD_10kBit = 26415 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_BAUD_USE_BTREX = 0 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_BAUD_AUTO = 65535 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_BAUDEX_1MBit = 131924 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_BAUDEX_800kBit = 197204 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_BAUDEX_500kBit = 328532 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_BAUDEX_250kBit = 721748 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_BAUDEX_125kBit = 1508180 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_BAUDEX_100kBit = 1508454 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_BAUDEX_50kBit = 3081318 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_BAUDEX_20kBit = 7799910 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_BAUDEX_10kBit = -2139683738 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_BAUDEX_SP2_1MBit = 132929 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_BAUDEX_SP2_800kBit = 198449 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_BAUDEX_SP2_500kBit = 329537 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_BAUDEX_SP2_250kBit = 722753 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_BAUDEX_SP2_125kBit = 1509185 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_BAUDEX_SP2_100kBit = 1906497 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_BAUDEX_SP2_50kBit = 3872577 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_BAUDEX_SP2_20kBit = 7804786 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_BAUDEX_SP2_10kBit = -2139678862 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_BAUDEX_USE_BTR01 = 0 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_BAUDEX_AUTO = -1 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_MSG_FF_STD = 0 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_MSG_FF_ECHO = 32 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_MSG_FF_RTR = 64 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_MSG_FF_EXT = 128 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_SUCCESSFUL = 0 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_ERR = 1 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_ERRCMD = 64 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_WARNING = 128 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_RESERVED = 192 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_ERR_RESOURCE = 1 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_ERR_MAXMODULES = 2 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_ERR_HWINUSE = 3 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_ERR_ILLVERSION = 4 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_ERR_ILLHW = 5 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_ERR_ILLHANDLE = 6 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_ERR_ILLPARAM = 7 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_ERR_BUSY = 8 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_ERR_TIMEOUT = 9 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_ERR_IOFAILED = 10 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_ERR_DLL_TXFULL = 11 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_ERR_MAXINSTANCES = 12 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_ERR_CANNOTINIT = 13 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_ERR_DISCONECT = 14 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_ERR_NOHWCLASS = 15 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_ERR_ILLCHANNEL = 16 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_ERR_RESERVED1 = 17 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_ERR_ILLHWTYPE = 18 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_ERRCMD_NOTEQU = 64 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_ERRCMD_REGTST = 65 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_ERRCMD_ILLCMD = 66 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_ERRCMD_EEPROM = 67 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_ERRCMD_RESERVED1 = 68 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_ERRCMD_RESERVED2 = 69 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_ERRCMD_RESERVED3 = 70 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_ERRCMD_ILLBDR = 71 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_ERRCMD_NOTINIT = 72 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_ERRCMD_ALREADYINIT = 73 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_ERRCMD_ILLSUBCMD = 74 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_ERRCMD_ILLIDX = 75 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_ERRCMD_RUNNING = 76 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_WARN_NODATA = 128 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_WARN_SYS_RXOVERRUN = 129 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_WARN_DLL_RXOVERRUN = 130 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_WARN_RESERVED1 = 131 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_WARN_RESERVED2 = 132 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_WARN_FW_TXOVERRUN = 133 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_WARN_FW_RXOVERRUN = 134 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_WARN_FW_TXMSGLOST = 135 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_WARN_NULL_PTR = 144 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_WARN_TXLIMIT = 145 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_WARN_BUSY = 146 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_EVENT_INITHW = 0 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_EVENT_INITCAN = 1 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_EVENT_RECIEVE = 2 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_EVENT_RECEIVE = 2 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_EVENT_STATUS = 3 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_EVENT_DEINITCAN = 4 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_EVENT_DEINITHW = 5 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_EVENT_CONNECT = 6 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_EVENT_DISCONNECT = 7 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_EVENT_FATALDISCON = 8 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_EVENT_RESERVED1 = 128 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_CANERR_OK = 0 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_CANERR_XMTFULL = 1 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_CANERR_OVERRUN = 2 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_CANERR_BUSLIGHT = 4 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_CANERR_BUSHEAVY = 8 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_CANERR_BUSOFF = 16 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_CANERR_QRCVEMPTY = 32 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_CANERR_QOVERRUN = 64 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_CANERR_QXMTFULL = 128 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_CANERR_REGTEST = 256 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_CANERR_MEMTEST = 512 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_CANERR_TXMSGLOST = 1024 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_USBERR_OK = 0 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_AMR_ALL = -1 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_ACR_ALL = 0 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_OCR_DEFAULT = 26 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_OCR_RS485_ISOLATED = 30 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_OCR_RS485_NOT_ISOLATED = 10 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_DEFAULT_BUFFER_ENTRIES = 4096 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_CHANNEL_CH0 = 0 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_CHANNEL_CH1 = 1 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_CHANNEL_ANY = 255 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_CHANNEL_ALL = 254 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_CHANNEL_CAN1 = 0 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_CHANNEL_CAN2 = 1 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_CHANNEL_LIN = 1 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_RESET_ALL = 0 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_RESET_NO_STATUS = 1 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_RESET_NO_CANCTRL = 2 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_RESET_NO_TXCOUNTER = 4 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_RESET_NO_RXCOUNTER = 8 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_RESET_NO_TXBUFFER_CH = 16 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_RESET_NO_TXBUFFER_DLL = 32 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_RESET_NO_TXBUFFER_FW = 128 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_RESET_NO_RXBUFFER_CH = 256 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_RESET_NO_RXBUFFER_DLL = 512 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_RESET_NO_RXBUFFER_SYS = 1024 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_RESET_NO_RXBUFFER_FW = 2048 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_RESET_FIRMWARE = -1 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_RESET_NO_COUNTER_ALL = 12 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_RESET_NO_TXBUFFER_COMM = 224 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_RESET_NO_RXBUFFER_COMM = 3584 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_RESET_NO_TXBUFFER_ALL = 240 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_RESET_NO_RXBUFFER_ALL = 3840 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_RESET_NO_BUFFER_COMM = 3808 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_RESET_NO_BUFFER_ALL = 4080 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_RESET_ONLY_STATUS = 65534 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_RESET_ONLY_CANCTRL = 65533 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_RESET_ONLY_TXBUFFER_FW = 65407 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_RESET_ONLY_RXBUFFER_FW = 63487 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_RESET_ONLY_RXCHANNEL_BUFF = 65279 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_RESET_ONLY_TXCHANNEL_BUFF = 65519 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_RESET_ONLY_RX_BUFF = 61687 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_RESET_ONLY_RX_BUFF_GW002 = 61559 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_RESET_ONLY_TX_BUFF = 65291 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_RESET_ONLY_ALL_BUFF = 61443 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_RESET_ONLY_ALL_COUNTER = 65523 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_PRODCODE_MASK_PID = 65535 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_PRODCODE_MASK_DID = -65536 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_PRODCODE_PID_TWO_CHA = 1 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_PRODCODE_PID_TERM = 1 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_PRODCODE_PID_RBUSER = 1 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_PRODCODE_PID_RBCAN = 1 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_PRODCODE_PID_GW001 = 4352 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_PRODCODE_PID_GW002 = 4354 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_PRODCODE_PID_MULTIPORT = 4355 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_PRODCODE_PID_BASIC = 4356 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_PRODCODE_PID_ADVANCED = 4357 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_PRODCODE_PID_USBCAN8 = 4359 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_PRODCODE_PID_USBCAN16 = 4361 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_PRODCODE_PID_RESERVED1 = 4420 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_PRODCODE_PID_RESERVED2 = 4421 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_MAX_CYCLIC_CANMSG = 16 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_CYCLIC_FLAG_STOPP = 0 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_CYCLIC_FLAG_START = -2147483648 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_CYCLIC_FLAG_SEQUMODE = 1073741824 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_CYCLIC_FLAG_NOECHO = 65536 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_CYCLIC_FLAG_LOCK_0 = 1 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_CYCLIC_FLAG_LOCK_1 = 2 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_CYCLIC_FLAG_LOCK_2 = 4 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_CYCLIC_FLAG_LOCK_3 = 8 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_CYCLIC_FLAG_LOCK_4 = 16 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_CYCLIC_FLAG_LOCK_5 = 32 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_CYCLIC_FLAG_LOCK_6 = 64 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_CYCLIC_FLAG_LOCK_7 = 128 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_CYCLIC_FLAG_LOCK_8 = 256 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_CYCLIC_FLAG_LOCK_9 = 512 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_CYCLIC_FLAG_LOCK_10 = 1024 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_CYCLIC_FLAG_LOCK_11 = 2048 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_CYCLIC_FLAG_LOCK_12 = 4096 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_CYCLIC_FLAG_LOCK_13 = 8192 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_CYCLIC_FLAG_LOCK_14 = 16384 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_CYCLIC_FLAG_LOCK_15 = 32768 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_PENDING_FLAG_RX_DLL = 1 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_PENDING_FLAG_RX_SYS = 2 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_PENDING_FLAG_RX_FW = 4 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_PENDING_FLAG_TX_DLL = 16 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_PENDING_FLAG_TX_SYS = 32 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_PENDING_FLAG_TX_FW = 64 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_PENDING_FLAG_RX_ALL = 7 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_PENDING_FLAG_TX_ALL = 112 : Public, Static, Literal, HasDefault
+    Int32 USBCAN_PENDING_FLAG_ALL = 119 : Public, Static, Literal, HasDefault
+  Properties:
+    Boolean IsHardwareInitialized 'get ' : 
+    Boolean IsCan0Initialized 'get ' : 
+    Boolean IsCan1Initialized 'get ' : 
+  Events:
+    CanMsgReceivedEventEventHandler CanMsgReceivedEvent: 
+    InitHwEventEventHandler InitHwEvent: 
+    InitCanEventEventHandler InitCanEvent: 
+    StatusEventEventHandler StatusEvent: 
+    DeinitCanEventEventHandler DeinitCanEvent: 
+    DeinitHwEventEventHandler DeinitHwEvent: 
+    ConnectEventEventHandler ConnectEvent: 
+    DisconnectEventEventHandler DisconnectEvent: 
+    FatalDisconnectEventEventHandler FatalDisconnectEvent: 
+  Methods:
+    SetDebugMode(Int32, String, Int32(Optional, HasDefault)): PrivateScope, Public, Static
+    InitHardware(Byte(Optional, HasDefault)): PrivateScope, Public
+    InitCan(Byte(Optional, HasDefault), Int16(Optional, HasDefault), Int32(Optional, HasDefault), Int32(Optional, HasDefault), Int32(Optional, HasDefault), Byte(Optional, HasDefault), Byte(Optional, HasDefault)): PrivateScope, Public
+    ReadCanMsg(Byte&, tCanMsgStruct[]&, Int32&(Optional, HasDefault)): PrivateScope, Public
+    WriteCanMsg(Byte, tCanMsgStruct[]&, Int32&(Optional, HasDefault)): PrivateScope, Public
+    SetBaudrate(Byte(Optional, HasDefault), Int16(Optional, HasDefault), Int32(Optional, HasDefault)): PrivateScope, Public
+    SetAcceptance(Byte(Optional, HasDefault), Int32(Optional, HasDefault), Int32(Optional, HasDefault)): PrivateScope, Public
+    GetStatus(Byte, tStatusStruct&): PrivateScope, Public
+    GetMsgCountInfo(Byte, Int16&, Int16&): PrivateScope, Public
+    ResetCan(Byte, Int32(Optional, HasDefault)): PrivateScope, Public
+    GetHardwareInfo(tUcanHardwareInfoEx&, tUcanChannelInfo&, tUcanChannelInfo&): PrivateScope, Public
+    GetUserDllVersion(): PrivateScope, Public
+    GetFwVersion(): PrivateScope, Public
+    DefineCyclicCanMsg(Byte, tCanMsgStruct[]&): PrivateScope, Public
+    ReadCyclicCanMsg(Byte, tCanMsgStruct[]&, Int32&(Optional, HasDefault)): PrivateScope, Public
+    EnableCyclicCanMsg(Byte, Int32): PrivateScope, Public
+    GetMsgPending(Byte, Int32, Int32&): PrivateScope, Public
+    GetCanErrorCounter(Byte, Int32&, Int32&): PrivateScope, Public
+    SetTxTimeout(Byte, Int32): PrivateScope, Public
+    Shutdown(Int32(Optional, HasDefault), Boolean(Optional, HasDefault)): PrivateScope, Public
+    get_IsHardwareInitialized(): PrivateScope, Public, SpecialName
+    get_IsCan0Initialized(): PrivateScope, Public, SpecialName
+    get_IsCan1Initialized(): PrivateScope, Public, SpecialName
+    GetCanStatusMessage(Int16): PrivateScope, Public, Static
+    GetBaudrateMessage(Byte, Byte): PrivateScope, Public, Static
+    GetBaudrateMessage(Int16): PrivateScope, Public, Static
+    GetBaudrateExMessage(Int16): PrivateScope, Public, Static
+    ConvertToMajorVer(Int32): PrivateScope, Public, Static
+    ConvertToMinorVer(Int32): PrivateScope, Public, Static
+    ConvertToReleaseVer(Int32): PrivateScope, Public, Static
+    CheckIs_sysWORXX(tUcanHardwareInfoEx): PrivateScope, Public, Static
+    CheckSupportCyclicMsg(tUcanHardwareInfoEx): PrivateScope, Public, Static
+    CheckSupportTwoChannel(tUcanHardwareInfoEx): PrivateScope, Public, Static
+    CheckSupportTermResistor(tUcanHardwareInfoEx): PrivateScope, Public, Static
+    CheckSupportUserPort(tUcanHardwareInfoEx): PrivateScope, Public, Static
+    CheckSupportRbUserPort(tUcanHardwareInfoEx): PrivateScope, Public, Static
+    CheckSupportRbCanPort(tUcanHardwareInfoEx): PrivateScope, Public, Static
+    CheckSupportUcannet(tUcanHardwareInfoEx): PrivateScope, Public, Static
+    Dispose(): PrivateScope, Public, Final, Virtual, HideBySig, VtableLayoutMask, CheckAccessOnOverride
+    add_ConnectEvent(ConnectEventEventHandler): PrivateScope, Public, Static, SpecialName
+    remove_FatalDisconnectEvent(FatalDisconnectEventEventHandler): PrivateScope, Public, SpecialName
+    add_FatalDisconnectEvent(FatalDisconnectEventEventHandler): PrivateScope, Public, SpecialName
+    remove_DisconnectEvent(DisconnectEventEventHandler): PrivateScope, Public, Static, SpecialName
+    add_DisconnectEvent(DisconnectEventEventHandler): PrivateScope, Public, Static, SpecialName
+    remove_ConnectEvent(ConnectEventEventHandler): PrivateScope, Public, Static, SpecialName
+    add_StatusEvent(StatusEventEventHandler): PrivateScope, Public, SpecialName
+    remove_DeinitHwEvent(DeinitHwEventEventHandler): PrivateScope, Public, SpecialName
+    add_DeinitHwEvent(DeinitHwEventEventHandler): PrivateScope, Public, SpecialName
+    remove_DeinitCanEvent(DeinitCanEventEventHandler): PrivateScope, Public, SpecialName
+    add_CanMsgReceivedEvent(CanMsgReceivedEventEventHandler): PrivateScope, Public, SpecialName
+    remove_CanMsgReceivedEvent(CanMsgReceivedEventEventHandler): PrivateScope, Public, SpecialName
+    add_DeinitCanEvent(DeinitCanEventEventHandler): PrivateScope, Public, SpecialName
+    add_InitHwEvent(InitHwEventEventHandler): PrivateScope, Public, SpecialName
+    remove_InitHwEvent(InitHwEventEventHandler): PrivateScope, Public, SpecialName
+    add_InitCanEvent(InitCanEventEventHandler): PrivateScope, Public, SpecialName
+    remove_InitCanEvent(InitCanEventEventHandler): PrivateScope, Public, SpecialName
+    remove_StatusEvent(StatusEventEventHandler): PrivateScope, Public, SpecialName
+Struct UcanDotNET.USBcanServer+tCanMsgStruct: AutoLayout, AnsiClass, Class, NestedPublic, SequentialLayout, Sealed
+  :System.ValueType
+  Fields:
+    Int32 m_dwID : Public
+    Byte m_bFF : Public
+    Byte m_bDLC : Public
+    Byte[] m_bData : Public, HasFieldMarshal
+    Int32 m_dwTime : Public
+  Methods:
+    CreateInstance(Int32(Optional, HasDefault), Byte(Optional, HasDefault)): PrivateScope, Public, Static
+Struct UcanDotNET.USBcanServer+tStatusStruct: AutoLayout, AnsiClass, Class, NestedPublic, SequentialLayout, Sealed
+  :System.ValueType
+  Fields:
+    Int16 m_wCanStatus : Public
+    Int16 m_wUsbStatus : Public
+Struct UcanDotNET.USBcanServer+tUcanHardwareInfoEx: AutoLayout, AnsiClass, Class, NestedPublic, SequentialLayout, Sealed
+  :System.ValueType
+  Fields:
+    Int32 m_dwSize : Public
+    Byte m_UcanHandle : Public
+    Byte m_bDeviceNr : Public
+    Int32 m_dwSerialNr : Public
+    Int32 m_dwFwVersionEx : Public
+    Int32 m_dwProductCode : Public
+Struct UcanDotNET.USBcanServer+tUcanChannelInfo: AutoLayout, AnsiClass, Class, NestedPublic, SequentialLayout, Sealed
+  :System.ValueType
+  Fields:
+    Int32 m_dwSize : Public
+    Byte m_bMode : Public
+    Byte m_bBTR0 : Public
+    Byte m_bBTR1 : Public
+    Byte m_bOCR : Public
+    Int32 m_dwAMR : Public
+    Int32 m_dwACR : Public
+    Int32 m_dwBaudrate : Public
+    Boolean m_fCanIsInit : Public, HasFieldMarshal
+    Int16 m_wCanStatus : Public
+Struct UcanDotNET.USBcanServer+tUcanMode: AutoLayout, AnsiClass, Class, NestedPublic, Sealed
+  :System.Enum
+  Fields:
+    Byte value__ : Public, SpecialName, RTSpecialName
+    tUcanMode kUcanModeNormal = 0 : Public, Static, Literal, HasDefault
+    tUcanMode kUcanModeListenOnly = 1 : Public, Static, Literal, HasDefault
+    tUcanMode kUcanModeTxEcho = 2 : Public, Static, Literal, HasDefault
+    tUcanMode kUcanModeRxOrderCh = 4 : Public, Static, Literal, HasDefault
+Class UcanDotNET.USBcanServer+CanMsgReceivedEventEventHandler: AutoLayout, AnsiClass, Class, NestedPublic, Sealed
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    BeginInvoke(Byte, AsyncCallback, Object): PrivateScope, Public, Virtual, VtableLayoutMask, CheckAccessOnOverride
+    EndInvoke(IAsyncResult): PrivateScope, Public, Virtual, VtableLayoutMask, CheckAccessOnOverride
+    Invoke(Byte): PrivateScope, Public, Virtual, VtableLayoutMask, CheckAccessOnOverride
+Class UcanDotNET.USBcanServer+InitHwEventEventHandler: AutoLayout, AnsiClass, Class, NestedPublic, Sealed
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    BeginInvoke(AsyncCallback, Object): PrivateScope, Public, Virtual, VtableLayoutMask, CheckAccessOnOverride
+    EndInvoke(IAsyncResult): PrivateScope, Public, Virtual, VtableLayoutMask, CheckAccessOnOverride
+    Invoke(): PrivateScope, Public, Virtual, VtableLayoutMask, CheckAccessOnOverride
+Class UcanDotNET.USBcanServer+InitCanEventEventHandler: AutoLayout, AnsiClass, Class, NestedPublic, Sealed
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    BeginInvoke(Byte, AsyncCallback, Object): PrivateScope, Public, Virtual, VtableLayoutMask, CheckAccessOnOverride
+    EndInvoke(IAsyncResult): PrivateScope, Public, Virtual, VtableLayoutMask, CheckAccessOnOverride
+    Invoke(Byte): PrivateScope, Public, Virtual, VtableLayoutMask, CheckAccessOnOverride
+Class UcanDotNET.USBcanServer+StatusEventEventHandler: AutoLayout, AnsiClass, Class, NestedPublic, Sealed
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    BeginInvoke(Byte, AsyncCallback, Object): PrivateScope, Public, Virtual, VtableLayoutMask, CheckAccessOnOverride
+    EndInvoke(IAsyncResult): PrivateScope, Public, Virtual, VtableLayoutMask, CheckAccessOnOverride
+    Invoke(Byte): PrivateScope, Public, Virtual, VtableLayoutMask, CheckAccessOnOverride
+Class UcanDotNET.USBcanServer+DeinitCanEventEventHandler: AutoLayout, AnsiClass, Class, NestedPublic, Sealed
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    BeginInvoke(Byte, AsyncCallback, Object): PrivateScope, Public, Virtual, VtableLayoutMask, CheckAccessOnOverride
+    EndInvoke(IAsyncResult): PrivateScope, Public, Virtual, VtableLayoutMask, CheckAccessOnOverride
+    Invoke(Byte): PrivateScope, Public, Virtual, VtableLayoutMask, CheckAccessOnOverride
+Class UcanDotNET.USBcanServer+DeinitHwEventEventHandler: AutoLayout, AnsiClass, Class, NestedPublic, Sealed
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    BeginInvoke(AsyncCallback, Object): PrivateScope, Public, Virtual, VtableLayoutMask, CheckAccessOnOverride
+    EndInvoke(IAsyncResult): PrivateScope, Public, Virtual, VtableLayoutMask, CheckAccessOnOverride
+    Invoke(): PrivateScope, Public, Virtual, VtableLayoutMask, CheckAccessOnOverride
+Class UcanDotNET.USBcanServer+ConnectEventEventHandler: AutoLayout, AnsiClass, Class, NestedPublic, Sealed
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    BeginInvoke(AsyncCallback, Object): PrivateScope, Public, Virtual, VtableLayoutMask, CheckAccessOnOverride
+    EndInvoke(IAsyncResult): PrivateScope, Public, Virtual, VtableLayoutMask, CheckAccessOnOverride
+    Invoke(): PrivateScope, Public, Virtual, VtableLayoutMask, CheckAccessOnOverride
+Class UcanDotNET.USBcanServer+DisconnectEventEventHandler: AutoLayout, AnsiClass, Class, NestedPublic, Sealed
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    BeginInvoke(AsyncCallback, Object): PrivateScope, Public, Virtual, VtableLayoutMask, CheckAccessOnOverride
+    EndInvoke(IAsyncResult): PrivateScope, Public, Virtual, VtableLayoutMask, CheckAccessOnOverride
+    Invoke(): PrivateScope, Public, Virtual, VtableLayoutMask, CheckAccessOnOverride
+Class UcanDotNET.USBcanServer+FatalDisconnectEventEventHandler: AutoLayout, AnsiClass, Class, NestedPublic, Sealed
+  :System.MulticastDelegate
+    Void .ctor(System.Object, IntPtr): PrivateScope, Public, SpecialName, RTSpecialName
+  Methods:
+    BeginInvoke(AsyncCallback, Object): PrivateScope, Public, Virtual, VtableLayoutMask, CheckAccessOnOverride
+    EndInvoke(IAsyncResult): PrivateScope, Public, Virtual, VtableLayoutMask, CheckAccessOnOverride
+    Invoke(): PrivateScope, Public, Virtual, VtableLayoutMask, CheckAccessOnOverride
