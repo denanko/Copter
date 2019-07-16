@@ -20,7 +20,7 @@ Assembly ZedGraph, Version=5.1.5.28844, Culture=neutral, PublicKeyToken=02a83cbd
 	hash=None, flags=None
 Assembly System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a: 
 	hash=None, flags=None
-Class CopterGUI.MyForm: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+Class CopterGUI.GuiForm: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
   :System.Windows.Forms.Form
     Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
   Fields:

@@ -104,7 +104,7 @@ namespace CopterGUI {
 	static long start[9] = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 	static long end[9] = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
-	public ref class MyForm : public System::Windows::Forms::Form
+	public ref class GuiForm : public System::Windows::Forms::Form
 	{
 		double avrgFromLeft = 0, avrgFromRight = 0;
 		int currGraphLayout = 0x1222, prevGraphLayout = 0x1222;
@@ -756,7 +756,7 @@ namespace CopterGUI {
 		string ssss = fileLocation;
 		String^ title = gcnew String(ssss.c_str());
 		this->Text = title;
-		//MyForm
+		//GuiForm
 		if (fin.fail())										// But before we start reading .. we need to check IF there is even a file there....
 		{													// We do that by calling a function from "fin" called fail().  It tells us if the file was opened or not.
 			strWord = "ERROR: Could not find Stats.txt!\n";	// Now, Print out an error message.  This is very important, especially when getting into huge projects.
@@ -1692,7 +1692,7 @@ namespace CopterGUI {
 				}
 
 	public:
-		MyForm(void)
+		GuiForm(void)
 		{
 			InitializeComponent();
 
@@ -1701,7 +1701,7 @@ namespace CopterGUI {
 		/// <summary>
 		/// Освободить все используемые ресурсы.
 		/// </summary>
-		~MyForm()
+		~GuiForm()
 		{
 			if (components)
 			{
@@ -1727,6 +1727,7 @@ namespace CopterGUI {
 		void InitializeComponent(void)
 		{
 			this->components = (gcnew System::ComponentModel::Container());
+			System::ComponentModel::ComponentResourceManager^  resources = (gcnew System::ComponentModel::ComponentResourceManager(GuiForm::typeid));
 			this->button1 = (gcnew System::Windows::Forms::Button());
 			this->startBtn = (gcnew System::Windows::Forms::Button());
 			this->openFileDialog1 = (gcnew System::Windows::Forms::OpenFileDialog());
@@ -1843,6 +1844,7 @@ namespace CopterGUI {
 			// 
 			this->button1->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
 			this->button1->BackColor = System::Drawing::Color::Transparent;
+			this->button1->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"button1.BackgroundImage")));
 			this->button1->FlatAppearance->BorderSize = 0;
 			this->button1->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
 			this->button1->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
@@ -1853,11 +1855,12 @@ namespace CopterGUI {
 			this->button1->TabIndex = 3;
 			this->toolTip2->SetToolTip(this->button1, L"Calibration (C)");
 			this->button1->UseVisualStyleBackColor = false;
-			this->button1->Click += gcnew System::EventHandler(this, &MyForm::button1_Click);
+			this->button1->Click += gcnew System::EventHandler(this, &GuiForm::button1_Click);
 			// 
 			// startBtn
 			// 
 			this->startBtn->BackColor = System::Drawing::Color::Transparent;
+			this->startBtn->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"startBtn.BackgroundImage")));
 			this->startBtn->FlatAppearance->BorderSize = 0;
 			this->startBtn->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
 			this->startBtn->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 14.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
@@ -1867,16 +1870,15 @@ namespace CopterGUI {
 			this->startBtn->Name = L"startBtn";
 			this->startBtn->Size = System::Drawing::Size(40, 40);
 			this->startBtn->TabIndex = 3;
-			this->startBtn->Text = L"start";
 			this->toolTip3->SetToolTip(this->startBtn, L"Start CAN (P)");
 			this->startBtn->UseVisualStyleBackColor = false;
-			this->startBtn->Click += gcnew System::EventHandler(this, &MyForm::startBtn_Click);
+			this->startBtn->Click += gcnew System::EventHandler(this, &GuiForm::startBtn_Click);
 			// 
 			// openFileDialog1
 			// 
 			this->openFileDialog1->FileName = L"openFileDialog1";
 			this->openFileDialog1->Filter = L"\"txt-files (*.txt)|*.txt|All files (*.*)|*.*\";";
-			this->openFileDialog1->FileOk += gcnew System::ComponentModel::CancelEventHandler(this, &MyForm::openFileDialog1_FileOk);
+			this->openFileDialog1->FileOk += gcnew System::ComponentModel::CancelEventHandler(this, &GuiForm::openFileDialog1_FileOk);
 			// 
 			// BottomToolStripPanel
 			// 
@@ -1951,7 +1953,7 @@ namespace CopterGUI {
 			this->changeKCheckBox->TabIndex = 203;
 			this->changeKCheckBox->Text = L"Set K =";
 			this->changeKCheckBox->UseVisualStyleBackColor = true;
-			this->changeKCheckBox->CheckedChanged += gcnew System::EventHandler(this, &MyForm::changeKCheckBox_CheckedChanged);
+			this->changeKCheckBox->CheckedChanged += gcnew System::EventHandler(this, &GuiForm::changeKCheckBox_CheckedChanged);
 			// 
 			// textBox19
 			// 
@@ -2100,7 +2102,7 @@ namespace CopterGUI {
 			this->zedGraphControl5->ScrollMinY2 = 0;
 			this->zedGraphControl5->Size = System::Drawing::Size(1004, 519);
 			this->zedGraphControl5->TabIndex = 2;
-			this->zedGraphControl5->Load += gcnew System::EventHandler(this, &MyForm::zedGraphControl5_Load);
+			this->zedGraphControl5->Load += gcnew System::EventHandler(this, &GuiForm::zedGraphControl5_Load);
 			// 
 			// tabControl1
 			// 
@@ -2210,7 +2212,7 @@ namespace CopterGUI {
 			this->SendLitBtn->TabIndex = 201;
 			this->SendLitBtn->Text = L"Send litera, Hz";
 			this->SendLitBtn->UseVisualStyleBackColor = true;
-			this->SendLitBtn->Click += gcnew System::EventHandler(this, &MyForm::SendLitBtn_Click);
+			this->SendLitBtn->Click += gcnew System::EventHandler(this, &GuiForm::SendLitBtn_Click);
 			// 
 			// label29
 			// 
@@ -2281,7 +2283,7 @@ namespace CopterGUI {
 			this->button2->TabIndex = 200;
 			this->button2->Text = L"Find transitions";
 			this->button2->UseVisualStyleBackColor = true;
-			this->button2->Click += gcnew System::EventHandler(this, &MyForm::button2_Click);
+			this->button2->Click += gcnew System::EventHandler(this, &GuiForm::button2_Click);
 			// 
 			// label3
 			// 
@@ -2834,6 +2836,7 @@ namespace CopterGUI {
 			this->checkBox1->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
 			this->checkBox1->Appearance = System::Windows::Forms::Appearance::Button;
 			this->checkBox1->BackColor = System::Drawing::Color::Transparent;
+			this->checkBox1->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"checkBox1.BackgroundImage")));
 			this->checkBox1->FlatAppearance->BorderSize = 0;
 			this->checkBox1->FlatAppearance->CheckedBackColor = System::Drawing::Color::Transparent;
 			this->checkBox1->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
@@ -2847,7 +2850,7 @@ namespace CopterGUI {
 			this->checkBox1->TabIndex = 88;
 			this->toolTip1->SetToolTip(this->checkBox1, L"Night mode (B)");
 			this->checkBox1->UseVisualStyleBackColor = true;
-			this->checkBox1->CheckedChanged += gcnew System::EventHandler(this, &MyForm::OnCheckedChanged);
+			this->checkBox1->CheckedChanged += gcnew System::EventHandler(this, &GuiForm::OnCheckedChanged);
 			// 
 			// panel1
 			// 
@@ -2879,6 +2882,7 @@ namespace CopterGUI {
 			// pauseBtn
 			// 
 			this->pauseBtn->BackColor = System::Drawing::Color::Transparent;
+			this->pauseBtn->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"pauseBtn.BackgroundImage")));
 			this->pauseBtn->FlatAppearance->BorderSize = 0;
 			this->pauseBtn->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
 			this->pauseBtn->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 14.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
@@ -2888,14 +2892,14 @@ namespace CopterGUI {
 			this->pauseBtn->Name = L"pauseBtn";
 			this->pauseBtn->Size = System::Drawing::Size(40, 40);
 			this->pauseBtn->TabIndex = 92;
-			this->pauseBtn->Text = L"pause";
 			this->toolTip4->SetToolTip(this->pauseBtn, L"Pause CAN");
 			this->pauseBtn->UseVisualStyleBackColor = false;
-			this->pauseBtn->Click += gcnew System::EventHandler(this, &MyForm::pauseBtn_Click);
+			this->pauseBtn->Click += gcnew System::EventHandler(this, &GuiForm::pauseBtn_Click);
 			// 
 			// saveBtn
 			// 
 			this->saveBtn->BackColor = System::Drawing::Color::Transparent;
+			this->saveBtn->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"saveBtn.BackgroundImage")));
 			this->saveBtn->FlatAppearance->BorderSize = 0;
 			this->saveBtn->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
 			this->saveBtn->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 14.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
@@ -2904,10 +2908,9 @@ namespace CopterGUI {
 			this->saveBtn->Name = L"saveBtn";
 			this->saveBtn->Size = System::Drawing::Size(40, 40);
 			this->saveBtn->TabIndex = 91;
-			this->saveBtn->Text = L"save";
 			this->toolTip7->SetToolTip(this->saveBtn, L"Save file (S)");
 			this->saveBtn->UseVisualStyleBackColor = false;
-			this->saveBtn->Click += gcnew System::EventHandler(this, &MyForm::saveBtn_Click);
+			this->saveBtn->Click += gcnew System::EventHandler(this, &GuiForm::saveBtn_Click);
 			// 
 			// openBtn
 			// 
@@ -2916,18 +2919,19 @@ namespace CopterGUI {
 			this->openBtn->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
 			this->openBtn->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 14.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
+			this->openBtn->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"openBtn.Image")));
 			this->openBtn->Location = System::Drawing::Point(200, 2);
 			this->openBtn->Name = L"openBtn";
 			this->openBtn->Size = System::Drawing::Size(40, 40);
 			this->openBtn->TabIndex = 90;
-			this->openBtn->Text = L"open";
 			this->toolTip6->SetToolTip(this->openBtn, L"Open file (O)");
 			this->openBtn->UseVisualStyleBackColor = false;
-			this->openBtn->Click += gcnew System::EventHandler(this, &MyForm::openBtn_Click_1);
+			this->openBtn->Click += gcnew System::EventHandler(this, &GuiForm::openBtn_Click_1);
 			// 
 			// stopBtn
 			// 
 			this->stopBtn->BackColor = System::Drawing::Color::Transparent;
+			this->stopBtn->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"stopBtn.BackgroundImage")));
 			this->stopBtn->FlatAppearance->BorderSize = 0;
 			this->stopBtn->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
 			this->stopBtn->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 14.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
@@ -2936,20 +2940,19 @@ namespace CopterGUI {
 			this->stopBtn->Name = L"stopBtn";
 			this->stopBtn->Size = System::Drawing::Size(40, 40);
 			this->stopBtn->TabIndex = 89;
-			this->stopBtn->Text = L"stop";
 			this->toolTip5->SetToolTip(this->stopBtn, L"Stop CAN (Clear graphs)");
 			this->stopBtn->UseVisualStyleBackColor = false;
-			this->stopBtn->Click += gcnew System::EventHandler(this, &MyForm::stopBtn_Click_1);
+			this->stopBtn->Click += gcnew System::EventHandler(this, &GuiForm::stopBtn_Click_1);
 			// 
 			// saveFileDialog1
 			// 
-			this->saveFileDialog1->FileOk += gcnew System::ComponentModel::CancelEventHandler(this, &MyForm::saveFileDialog1_FileOk);
+			this->saveFileDialog1->FileOk += gcnew System::ComponentModel::CancelEventHandler(this, &GuiForm::saveFileDialog1_FileOk);
 			// 
 			// toolTip1
 			// 
 			this->toolTip1->AutomaticDelay = 300;
 			// 
-			// MyForm
+			// GuiForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
@@ -2957,12 +2960,12 @@ namespace CopterGUI {
 			this->Controls->Add(this->panel1);
 			this->Controls->Add(this->tabControl1);
 			this->KeyPreview = true;
-			this->Name = L"MyForm";
-			this->Text = L"MyForm";
+			this->Name = L"GuiForm";
+			this->Text = L"GuiForm";
 			this->WindowState = System::Windows::Forms::FormWindowState::Maximized;
-			this->Closed += gcnew System::EventHandler(this, &MyForm::MyForm_Closed);
-			this->Load += gcnew System::EventHandler(this, &MyForm::MyForm_Load);
-			this->KeyUp += gcnew System::Windows::Forms::KeyEventHandler(this, &MyForm::MyForm_KeyUp);
+			this->Closed += gcnew System::EventHandler(this, &GuiForm::GuiForm_Closed);
+			this->Load += gcnew System::EventHandler(this, &GuiForm::GuiForm_Load);
+			this->KeyUp += gcnew System::Windows::Forms::KeyEventHandler(this, &GuiForm::GuiForm_KeyUp);
 			this->tabPage5->ResumeLayout(false);
 			this->tabPage5->PerformLayout();
 			this->tabControl1->ResumeLayout(false);
@@ -2990,12 +2993,12 @@ namespace CopterGUI {
 		// CAN
 		//
 		this->CANsrv = (gcnew UcanDotNET::USBcanServer());
-		this->zedGraphControl1->MouseDownEvent += gcnew ZedGraphControl::ZedMouseEventHandler(this, &MyForm::MouseDown);
-		this->zedGraphControl1->MouseUpEvent += gcnew ZedGraphControl::ZedMouseEventHandler(this, &MyForm::MouseUp);
-		this->zedGraphControl1->MouseMoveEvent += gcnew ZedGraphControl::ZedMouseEventHandler(this, &MyForm::MouseMove);
-		this->zedGraphControl5->MouseDownEvent += gcnew ZedGraphControl::ZedMouseEventHandler(this, &MyForm::MouseDown);
-		this->zedGraphControl5->MouseUpEvent += gcnew ZedGraphControl::ZedMouseEventHandler(this, &MyForm::MouseUp);
-		this->zedGraphControl5->MouseMoveEvent += gcnew ZedGraphControl::ZedMouseEventHandler(this, &MyForm::MouseMove);
+		this->zedGraphControl1->MouseDownEvent += gcnew ZedGraphControl::ZedMouseEventHandler(this, &GuiForm::MouseDown);
+		this->zedGraphControl1->MouseUpEvent += gcnew ZedGraphControl::ZedMouseEventHandler(this, &GuiForm::MouseUp);
+		this->zedGraphControl1->MouseMoveEvent += gcnew ZedGraphControl::ZedMouseEventHandler(this, &GuiForm::MouseMove);
+		this->zedGraphControl5->MouseDownEvent += gcnew ZedGraphControl::ZedMouseEventHandler(this, &GuiForm::MouseDown);
+		this->zedGraphControl5->MouseUpEvent += gcnew ZedGraphControl::ZedMouseEventHandler(this, &GuiForm::MouseUp);
+		this->zedGraphControl5->MouseMoveEvent += gcnew ZedGraphControl::ZedMouseEventHandler(this, &GuiForm::MouseMove);
 			*/
 #pragma endregion
 	private: System::Void button1_Click(System::Object^  sender, System::EventArgs^  e)
@@ -3009,16 +3012,16 @@ namespace CopterGUI {
 	private: System::Void openFileDialog1_FileOk(System::Object^  sender, System::ComponentModel::CancelEventArgs^  e)
 	{
 	}
-	private: System::Void MyForm_Load(System::Object^  sender, System::EventArgs^  e)
+	private: System::Void GuiForm_Load(System::Object^  sender, System::EventArgs^  e)
 	{
 		FileRead(0, 1);
 		textBox19->Text = "" + K;
 	}
-	private: System::Void MyForm_Closed(System::Object^  sender, System::EventArgs^  e)
+	private: System::Void GuiForm_Closed(System::Object^  sender, System::EventArgs^  e)
 	{
 		//	 CANsrv->Shutdown(254, true);
 	}
-	private: System::Void MyForm_KeyUp(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e)
+	private: System::Void GuiForm_KeyUp(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e)
 	{
 		if (e->KeyCode == Keys::P)
 		{

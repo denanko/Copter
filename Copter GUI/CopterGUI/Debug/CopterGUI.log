@@ -25,8 +25,8 @@ d:\projects\copter\trunk\copter gui\coptergui\guiform.h(1203): warning C4101: 'd
 d:\projects\copter\trunk\copter gui\coptergui\guiform.h(1346): warning C4101: 'graphY': unreferenced local variable
 d:\projects\copter\trunk\copter gui\coptergui\guiform.h(1346): warning C4101: 'graphX': unreferenced local variable
 d:\projects\copter\trunk\copter gui\coptergui\guiform.h(1480): warning C4101: 'myStream': unreferenced local variable
-d:\projects\copter\trunk\copter gui\coptergui\guiform.h(3089): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-d:\projects\copter\trunk\copter gui\coptergui\guiform.h(3120): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-d:\projects\copter\trunk\copter gui\coptergui\guiform.h(3150): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+d:\projects\copter\trunk\copter gui\coptergui\guiform.h(3092): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+d:\projects\copter\trunk\copter gui\coptergui\guiform.h(3123): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+d:\projects\copter\trunk\copter gui\coptergui\guiform.h(3153): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
   GuiForm.obj : MSIL module encountered; incremental linking is disabled for MSIL; performing full link
   CopterGUI.vcxproj -> D:\Projects\Copter\trunk\Copter GUI\Debug\CopterGUI.exe

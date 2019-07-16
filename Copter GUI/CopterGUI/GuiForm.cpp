@@ -21,6 +21,6 @@ using namespace UcanDotNET;
 void Main() {
 	Application::EnableVisualStyles();
 	Application::SetCompatibleTextRenderingDefault(false);
-	CopterGUI::MyForm form;
+	CopterGUI::GuiForm form;
 	Application::Run(%form);
 }
