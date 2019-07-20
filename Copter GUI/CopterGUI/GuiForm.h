@@ -39,61 +39,6 @@ namespace CopterGUI {
 	using namespace std;				// Set our namespace to standard
 	using namespace System::Runtime::InteropServices;
 
-	//Структура данных с КЦФ-М120
-	//*********** KNL_Z_Y (0х128) ************
-	struct KCF_DATA_0
-	{
-		//bits   				description
-
-		unsigned int Gotovnost : 1;    //
-		unsigned int LiteraEst : 1;    //
-		unsigned int ULvlTx : 1;    //
-		unsigned int CoordTx : 1;    //
-		double Phase;   // 
-		double Peleng;		   //
-		unsigned int Counter : 4;
-		unsigned int ARU : 2;
-		unsigned int Zasvet : 1;
-		unsigned int Zahvat : 1;
-	};
-	struct KCF_DATA_1
-	{
-		//bits   				description
-		double U2;   	//
-		double U1;		// 
-	};
-	struct KCF_DATA_2
-	{
-		//bits   				description
-		double U4;   	//
-		double U3;		//
-	};
-
-	union KCF_DATA_0_REG
-	{
-		unsigned int        all;
-		struct KCF_DATA_0	bit;
-	};
-	union KCF_DATA_1_REG
-	{
-		unsigned int        all;
-		struct KCF_DATA_1	bit;
-	};
-	union KCF_DATA_2_REG
-	{
-		unsigned int        all;
-		struct KCF_DATA_2	bit;
-	};
-
-	struct KCF_DATA_REG
-	{
-		union 		KCF_DATA_0_REG	P_and_Ph;	// See struct KNL_Z_Y_Byte_0_3
-		union 		KCF_DATA_1_REG	U1_U2;	// See struct KNL_Z_Y_Byte_4_5
-		union 		KCF_DATA_2_REG	U3_U4;
-	};
-
-	static struct KCF_DATA_REG KCF_DATA;
-
 	struct U {
 		unsigned number;
 		double	values[10000];
@@ -106,6 +51,9 @@ namespace CopterGUI {
 
 	public ref class GuiForm : public System::Windows::Forms::Form
 	{
+		/* Added for Copter */
+
+
 		double avrgFromLeft = 0, avrgFromRight = 0;
 		int currGraphLayout = 0x1222, prevGraphLayout = 0x1222;
 		int calibrationInProgressFlag = 0, boxesAreDrawedFlag = 0;
@@ -158,21 +106,12 @@ namespace CopterGUI {
 		String^ subStr = gcnew String("");
 
 	public:
-		static UcanDotNET::USBcanServer^ CANsrv;
-
-		//private: System::Void CanMsgReceived(unsigned char pChannel);
-		//UcanDotNET::USBcanServer::CanMsgReceivedEventEventHandler^ CanMsgReceived;
-
 	private: System::Windows::Forms::TabPage^  tabPage1;
 	private: ZedGraph::ZedGraphControl^  zedGraphControl1;
 	private: System::Windows::Forms::CheckBox^  checkBox1;
 	private: System::Windows::Forms::TabPage^  tabPage5;
 	private: ZedGraph::ZedGraphControl^  zedGraphControl5;
-
-
-
 	private: System::Windows::Forms::TabControl^  tabControl1;
-
 	private: System::Windows::Forms::ToolStripPanel^  BottomToolStripPanel;
 	private: System::Windows::Forms::ToolStripPanel^  TopToolStripPanel;
 	private: System::Windows::Forms::ToolStripPanel^  RightToolStripPanel;
@@ -187,84 +126,86 @@ namespace CopterGUI {
 	private: System::Windows::Forms::Label^  label21;
 	private: System::Windows::Forms::Label^  label28;
 	private: System::Windows::Forms::Label^  label27;
-
-
 	private: System::Windows::Forms::Panel^  panel1;
-
-
-
 	private: System::Windows::Forms::Panel^  panel5;
-	private: System::Windows::Forms::CheckBox^  U2CheckBox;
-	private: System::Windows::Forms::CheckBox^  U3CheckBox;
-	private: System::Windows::Forms::CheckBox^  U1CheckBox;
-	private: System::Windows::Forms::CheckBox^  U4CheckBox;
-	private: System::Windows::Forms::Panel^  panel4;
-	private: System::Windows::Forms::CheckBox^  PhaseCheckBox;
-	private: System::Windows::Forms::Panel^  panel3;
-	private: System::Windows::Forms::CheckBox^  PelengCheckBox;
+	private: System::Windows::Forms::CheckBox^  GyroRollCheckBox;
+	private: System::Windows::Forms::CheckBox^  RollOutCheckBox;
+
+
+	private: System::Windows::Forms::CheckBox^  RcRollCheckBox;
+	private: System::Windows::Forms::CheckBox^  StabRollCheckBox;
+
+
+	private: System::Windows::Forms::CheckBox^  RolEnAllCheckBox;
+
+
+
+	private: System::Windows::Forms::CheckBox^  PitEnAllCheckBox;
+
+
 	private: System::Windows::Forms::Panel^  panel2;
+	private: System::Windows::Forms::CheckBox^  GyroPitCheckBox;
+	private: System::Windows::Forms::CheckBox^  StabPitCheckBox;
 
-	private: System::Windows::Forms::CheckBox^  ZasvetCheckBox;
-	private: System::Windows::Forms::CheckBox^  ARUCheckBox;
 
-	private: System::Windows::Forms::CheckBox^  ZahvatCheckBox;
+	private: System::Windows::Forms::CheckBox^  RcPitCheckBox;
+
 	private: System::Windows::Forms::Button^  stopBtn;
-
 	private: System::Windows::Forms::Button^  saveBtn;
-
 	private: System::Windows::Forms::Button^  openBtn;
-
 	private: System::Windows::Forms::SaveFileDialog^  saveFileDialog1;
 	private: System::Windows::Forms::ProgressBar^  progressBar1;
 	private: System::Windows::Forms::Button^  pauseBtn;
-	private: System::Windows::Forms::CheckBox^  CounterCheckBox;
+	private: System::Windows::Forms::CheckBox^  PitOutCheckBox;
 
 	private: System::Windows::Forms::Panel^  panel6;
-	private: System::Windows::Forms::Label^  label29;
-	private: System::Windows::Forms::Label^  label3;
-	private: System::Windows::Forms::TextBox^  textBox1;
-	private: System::Windows::Forms::TextBox^  textBox2;
+
+
+
+
 	private: System::Windows::Forms::Label^  label5;
 	private: System::Windows::Forms::Label^  label19;
 	private: System::Windows::Forms::TextBox^  textBox17;
 	private: System::Windows::Forms::TextBox^  textBox18;
 	private: System::Windows::Forms::Label^  label20;
 	private: System::Windows::Forms::Label^  label17;
-	private: System::Windows::Forms::TextBox^  textBox15;
-	private: System::Windows::Forms::TextBox^  textBox16;
+private: System::Windows::Forms::TextBox^  YawOutTextBox;
+
+private: System::Windows::Forms::TextBox^  BRTextBox;
+
 	private: System::Windows::Forms::Label^  label6;
 	private: System::Windows::Forms::Label^  label18;
-	private: System::Windows::Forms::TextBox^  textBox4;
+
 	private: System::Windows::Forms::Label^  label15;
-	private: System::Windows::Forms::TextBox^  textBox3;
-	private: System::Windows::Forms::TextBox^  textBox13;
+private: System::Windows::Forms::TextBox^  StabYawTextBox;
+
+
 	private: System::Windows::Forms::Label^  label4;
-	private: System::Windows::Forms::TextBox^  textBox14;
+private: System::Windows::Forms::TextBox^  BLTextBox;
+
 	private: System::Windows::Forms::Label^  label8;
 	private: System::Windows::Forms::Label^  label16;
-	private: System::Windows::Forms::TextBox^  textBox6;
+
 	private: System::Windows::Forms::Label^  label13;
-	private: System::Windows::Forms::TextBox^  textBox5;
-	private: System::Windows::Forms::TextBox^  textBox11;
+
+
 	private: System::Windows::Forms::Label^  label7;
-	private: System::Windows::Forms::TextBox^  textBox12;
+
 	private: System::Windows::Forms::Label^  label10;
 	private: System::Windows::Forms::Label^  label14;
-	private: System::Windows::Forms::TextBox^  textBox8;
+
 	private: System::Windows::Forms::Label^  label11;
-	private: System::Windows::Forms::TextBox^  textBox7;
-	private: System::Windows::Forms::TextBox^  textBox9;
+
+
 	private: System::Windows::Forms::Label^  label9;
-	private: System::Windows::Forms::TextBox^  textBox10;
+
 	private: System::Windows::Forms::Label^  label12;
-	private: System::Windows::Forms::Button^  button2;
-	private: System::Windows::Forms::TextBox^  LiteraTextBox;
 
-	private: System::Windows::Forms::Button^  SendLitBtn;
+
+
 	private: System::Windows::Forms::Panel^  panel7;
-	private: System::Windows::Forms::CheckBox^  VoltageCheckBox;
 
-	private: System::Windows::Forms::CheckBox^  CoordCheckBox;
+
 	private: System::Windows::Forms::Label^  softVerLbl;
 	private: System::Windows::Forms::Label^  pvkNumberLbl;
 	private: System::Windows::Forms::ToolTip^  toolTip1;
@@ -276,13 +217,74 @@ namespace CopterGUI {
 	private: System::Windows::Forms::ToolTip^  toolTip7;
 	private: System::Windows::Forms::CheckBox^  changeKCheckBox;
 	private: System::Windows::Forms::TextBox^  textBox19;
+private: System::Windows::Forms::Label^  label3;
+private: System::Windows::Forms::TextBox^  RcPitTextBox;
 
+private: System::Windows::Forms::TextBox^  GyroPitTextBox;
+
+private: System::Windows::Forms::TextBox^  PitOutTextBox;
+private: System::Windows::Forms::TextBox^  StabPitTextBox;
+
+
+private: System::Windows::Forms::TextBox^  GyroRollTextBox;
+private: System::Windows::Forms::TextBox^  RcRollTextBox;
+
+
+
+private: System::Windows::Forms::TextBox^  GyroYawTextBox;
+
+
+private: System::Windows::Forms::TextBox^  FRTextBox;
+private: System::Windows::Forms::TextBox^  RollOutTextBox;
+private: System::Windows::Forms::TextBox^  StabRollTextBox;
+private: System::Windows::Forms::TextBox^  RcYawTextBox;
+
+
+
+
+
+
+private: System::Windows::Forms::TextBox^  FLTextBox;
+
+private: System::Windows::Forms::Panel^  panel3;
+private: System::Windows::Forms::CheckBox^  YawEnAllCheckBox;
+private: System::Windows::Forms::CheckBox^  GyroYawCheckBox;
+private: System::Windows::Forms::CheckBox^  YawOutCheckBox;
+
+
+
+private: System::Windows::Forms::CheckBox^  RcYawCheckBox;
+private: System::Windows::Forms::CheckBox^  StabYawCheckBox;
+private: System::Windows::Forms::CheckBox^  MotorEnAllCheckBox;
+private: System::Windows::Forms::CheckBox^  FRCheckBox;
+private: System::Windows::Forms::CheckBox^  BRCheckBox;
+private: System::Windows::Forms::CheckBox^  FLCheckBox;
+private: System::Windows::Forms::CheckBox^  BLCheckBox;
+private: System::Windows::Forms::Label^  label29;
+private: System::Windows::Forms::TextBox^  RcThrTextBox;
+
+private: System::Windows::Forms::CheckBox^  RcThrCheckBox;
+private: System::Windows::Forms::CheckBox^  IntRollCheckBox;
+private: System::Windows::Forms::TextBox^  IntRollTextBox;
+
+private: System::Windows::Forms::Label^  label31;
+private: System::Windows::Forms::Label^  label32;
+private: System::Windows::Forms::TextBox^  IntPitTextBox;
+
+private: System::Windows::Forms::CheckBox^  IntPitCheckBox;
+private: System::Windows::Forms::CheckBox^  IntYawCheckBox;
+private: System::Windows::Forms::TextBox^  IntYawTextBox;
+
+private: System::Windows::Forms::Label^  label30;
 
 
 	private: System::Windows::Forms::ToolStripContentPanel^  ContentPanel;
 
+
+
 	public: void Load_Graw(double tMax, GraphPane ^currPane, ZedGraphControl ^currZed)
 	{
+
 		int scaleFont = 0, axisTitleFont = 0, legendFont = 0;
 
 		if (checkBox1->CheckState == CheckState::Checked)
@@ -750,7 +752,6 @@ namespace CopterGUI {
 		ifstream fin;				// Here we create an ifstream object and we will call it "fin", like "cin"
 		string strLine = "";		// Lets create a string to hold a line of text from the file
 		string strWord = "";		// This will hold a word of text
-		//static int point = 0, gold = 0;	// We will read in the player's health and gold from a file
 
 		fin.open(fileLocation);
 		string ssss = fileLocation;
@@ -759,7 +760,7 @@ namespace CopterGUI {
 		//GuiForm
 		if (fin.fail())										// But before we start reading .. we need to check IF there is even a file there....
 		{													// We do that by calling a function from "fin" called fail().  It tells us if the file was opened or not.
-			strWord = "ERROR: Could not find Stats.txt!\n";	// Now, Print out an error message.  This is very important, especially when getting into huge projects.
+			strWord = "ERROR: File couldn't be found!\n";	// Now, Print out an error message.  This is very important, especially when getting into huge projects.
 		}
 
 		end_of_file = 0;
@@ -774,7 +775,8 @@ namespace CopterGUI {
 		Cursor->Current = Cursors::WaitCursor;
 
 		fin.open(fileLocation);
-		getline(fin, strLine);		//Считываем первую строку (которая нам не нужна) и устанавливаем указатель на вторую строку
+		getline(fin, strLine);		//Get first line with graph header
+		ParseHeader(strLine);
 		pvkNumber_pos = strLine.find("ПВК №", 0);
 		pvkVersion_pos = strLine.find("v.", pvkNumber_pos);
 		if (pvkNumber_pos != -1 && pvkVersion_pos != -1)
@@ -918,50 +920,50 @@ namespace CopterGUI {
 					{
 					case 1:
 						s0 = start[0];
-						textBox1->Text = (0).ToString("F2");
+						/*textBox1->Text = (0).ToString("F2");
 						textBox2->Text = timeBuffer[0].ToString("F2");
-						textBox3->Text = timeBuffer[BufferSize - 1].ToString("F2");
+						textBox3->Text = timeBuffer[BufferSize - 1].ToString("F2");*/
 						e0 = end[0] = i - middleOfBuffer;
 						s1 = start[1] = i + middleOfBuffer;
 						break;
 					case 2:
-						textBox4->Text = timeBuffer[0].ToString("F2");
-						textBox5->Text = timeBuffer[BufferSize - 1].ToString("F2");
+					/*	textBox4->Text = timeBuffer[0].ToString("F2");
+						textBox5->Text = timeBuffer[BufferSize - 1].ToString("F2");*/
 						e1 = end[1] = i - middleOfBuffer;
 						s2 = start[2] = i + middleOfBuffer;
 						break;
 					case 3:
-						textBox6->Text = timeBuffer[0].ToString("F2");
-						textBox7->Text = timeBuffer[BufferSize - 1].ToString("F2");
+					//	textBox6->Text = timeBuffer[0].ToString("F2");
+					//	textBox7->Text = timeBuffer[BufferSize - 1].ToString("F2");
 						e2 = end[2] = i - middleOfBuffer;
 						s3 = start[3] = i + middleOfBuffer;
 						break;
 					case 4:
-						textBox8->Text = timeBuffer[0].ToString("F2");
-						textBox9->Text = timeBuffer[BufferSize - 1].ToString("F2");
+					//	textBox8->Text = timeBuffer[0].ToString("F2");
+					//	textBox9->Text = timeBuffer[BufferSize - 1].ToString("F2");
 						e3 = end[3] = i - middleOfBuffer;
 						s4 = start[4] = i + middleOfBuffer;
 						break;
 					case 5:
-						textBox10->Text = timeBuffer[0].ToString("F2");
-						textBox11->Text = timeBuffer[BufferSize - 1].ToString("F2");
+					//	textBox10->Text = timeBuffer[0].ToString("F2");
+					//	textBox11->Text = timeBuffer[BufferSize - 1].ToString("F2");
 						e4 = end[4] = i - middleOfBuffer;
 						s5 = start[5] = i + middleOfBuffer;
 						break;
 					case 6:
-						textBox12->Text = timeBuffer[0].ToString("F2");
-						textBox13->Text = timeBuffer[BufferSize - 1].ToString("F2");
+					//	textBox12->Text = timeBuffer[0].ToString("F2");
+					//	textBox13->Text = timeBuffer[BufferSize - 1].ToString("F2");
 						e5 = end[5] = i - middleOfBuffer;
 						s6 = start[6] = i + middleOfBuffer;
 						break;
 					case 7:
-						textBox14->Text = timeBuffer[0].ToString("F2");
-						textBox15->Text = timeBuffer[BufferSize - 1].ToString("F2");
+					//	textBox14->Text = timeBuffer[0].ToString("F2");
+					//	textBox15->Text = timeBuffer[BufferSize - 1].ToString("F2");
 						e6 = end[6] = i - middleOfBuffer;
 						s7 = start[7] = i + middleOfBuffer;
 						break;
 					case 8:
-						textBox16->Text = timeBuffer[0].ToString("F2");
+					//	textBox16->Text = timeBuffer[0].ToString("F2");
 						textBox17->Text = timeBuffer[BufferSize - 1].ToString("F2");
 						textBox18->Text = (timeBuffer[BufferSize - 1] + 3).ToString("F2");
 						e7 = end[7] = i - middleOfBuffer;
@@ -1202,8 +1204,8 @@ namespace CopterGUI {
 		double start = 0, width = 0;
 		bool a = true, b, c, d;
 		//index = currZed->MasterPane->PaneList[2]->GraphObjList->FindLast;
-		(textBox1->Text != "") ? (start = System::Convert::ToDouble(textBox1->Text)) : (start = 0);
-		(textBox1->Text != "" && textBox2->Text != "") ? (width = System::Convert::ToDouble(textBox2->Text) - System::Convert::ToDouble(textBox1->Text)) : (width = 0);
+		//(textBox1->Text != "") ? (start = System::Convert::ToDouble(textBox1->Text)) : (start = 0);
+		//(textBox1->Text != "" && textBox2->Text != "") ? (width = System::Convert::ToDouble(textBox2->Text) - System::Convert::ToDouble(textBox1->Text)) : (width = 0);
 		(width > 0) ? (width = width) : (width = 0);
 		(width == 0) ? (a &= false) : (a &= true);
 		currZed->MasterPane->PaneList[2]->GraphObjList->Clear();
@@ -1214,8 +1216,8 @@ namespace CopterGUI {
 		text->FontSpec = gcnew FontSpec("1", 28, Color::Black, false, false, false);
 		currZed->MasterPane->PaneList[2]->GraphObjList->Add(text);
 
-		(textBox3->Text != "") ? (start = System::Convert::ToDouble(textBox3->Text)) : (start = 0);
-		(textBox3->Text != "" && textBox4->Text != "") ? (width = System::Convert::ToDouble(textBox4->Text) - System::Convert::ToDouble(textBox3->Text)) : (width = 0);
+		//(textBox3->Text != "") ? (start = System::Convert::ToDouble(textBox3->Text)) : (start = 0);
+	//	(textBox3->Text != "" && textBox4->Text != "") ? (width = System::Convert::ToDouble(textBox4->Text) - System::Convert::ToDouble(textBox3->Text)) : (width = 0);
 		(width > 0) ? (width = width) : (width = 0);
 		(width == 0) ? (a &= false) : (a &= true);
 		box = gcnew BoxObj(start, 350, width, 350, Color::LightGray, Color::LightGray);// Color.FromArgb(225, 245, 225));
@@ -1227,8 +1229,8 @@ namespace CopterGUI {
 			text->FontSpec = gcnew FontSpec("2", 28, Color::Black, false, false, false);
 			currZed->MasterPane->PaneList[2]->GraphObjList->Add(text);
 		}
-		(textBox5->Text != "") ? (start = System::Convert::ToDouble(textBox5->Text)) : (start = 0);
-		(textBox5->Text != "" && textBox6->Text != "") ? (width = System::Convert::ToDouble(textBox6->Text) - System::Convert::ToDouble(textBox5->Text)) : (width = 0);
+		//(textBox5->Text != "") ? (start = System::Convert::ToDouble(textBox5->Text)) : (start = 0);
+	//	(textBox5->Text != "" && textBox6->Text != "") ? (width = System::Convert::ToDouble(textBox6->Text) - System::Convert::ToDouble(textBox5->Text)) : (width = 0);
 		(width > 0) ? (width = width) : (width = 0);
 		(width == 0) ? (a &= false) : (a &= true);
 		box = gcnew BoxObj(start, 350, width, 350, Color::LightGray, Color::LightGray);// Color.FromArgb(225, 245, 225));
@@ -1241,8 +1243,8 @@ namespace CopterGUI {
 			currZed->MasterPane->PaneList[2]->GraphObjList->Add(text);
 		}
 
-		(textBox7->Text != "") ? (start = System::Convert::ToDouble(textBox7->Text)) : (start = 0);
-		(textBox7->Text != "" && textBox8->Text != "") ? (width = System::Convert::ToDouble(textBox8->Text) - System::Convert::ToDouble(textBox7->Text)) : (width = 0);
+		//(textBox7->Text != "") ? (start = System::Convert::ToDouble(textBox7->Text)) : (start = 0);
+	//	(textBox7->Text != "" && textBox8->Text != "") ? (width = System::Convert::ToDouble(textBox8->Text) - System::Convert::ToDouble(textBox7->Text)) : (width = 0);
 		(width > 0) ? (width = width) : (width = 0);
 		(width == 0) ? (a &= false) : (a &= true);
 		box = gcnew BoxObj(start, 350, width, 350, Color::LightGray, Color::LightGray);// Color.FromArgb(225, 245, 225));
@@ -1254,8 +1256,8 @@ namespace CopterGUI {
 			text->FontSpec = gcnew FontSpec("4", 28, Color::Black, false, false, false);
 			currZed->MasterPane->PaneList[2]->GraphObjList->Add(text);
 		}
-		(textBox9->Text != "") ? (start = System::Convert::ToDouble(textBox9->Text)) : (start = 0);
-		(textBox9->Text != "" && textBox10->Text != "") ? (width = System::Convert::ToDouble(textBox10->Text) - System::Convert::ToDouble(textBox9->Text)) : (width = 0);
+	//	(textBox9->Text != "") ? (start = System::Convert::ToDouble(textBox9->Text)) : (start = 0);
+		//(textBox9->Text != "" && textBox10->Text != "") ? (width = System::Convert::ToDouble(textBox10->Text) - System::Convert::ToDouble(textBox9->Text)) : (width = 0);
 		(width > 0) ? (width = width) : (width = 0);
 		(width == 0) ? (a &= false) : (a &= true);
 		box = gcnew BoxObj(start, 350, width, 350, Color::LightGray, Color::LightGray);// Color.FromArgb(225, 245, 225));
@@ -1267,8 +1269,8 @@ namespace CopterGUI {
 			text->FontSpec = gcnew FontSpec("5", 28, Color::Black, false, false, false);
 			currZed->MasterPane->PaneList[2]->GraphObjList->Add(text);
 		}
-		(textBox11->Text != "") ? (start = System::Convert::ToDouble(textBox11->Text)) : (start = 0);
-		(textBox11->Text != "" && textBox12->Text != "") ? (width = System::Convert::ToDouble(textBox12->Text) - System::Convert::ToDouble(textBox11->Text)) : (width = 0);
+	//	(textBox11->Text != "") ? (start = System::Convert::ToDouble(textBox11->Text)) : (start = 0);
+	//	(textBox11->Text != "" && textBox12->Text != "") ? (width = System::Convert::ToDouble(textBox12->Text) - System::Convert::ToDouble(textBox11->Text)) : (width = 0);
 		(width > 0) ? (width = width) : (width = 0);
 		(width == 0) ? (a &= false) : (a &= true);
 		box = gcnew BoxObj(start, 350, width, 350, Color::LightGray, Color::LightGray);// Color.FromArgb(225, 245, 225));
@@ -1280,8 +1282,8 @@ namespace CopterGUI {
 			text->FontSpec = gcnew FontSpec("6", 28, Color::Black, false, false, false);
 			currZed->MasterPane->PaneList[2]->GraphObjList->Add(text);
 		}
-		(textBox13->Text != "") ? (start = System::Convert::ToDouble(textBox13->Text)) : (start = 0);
-		(textBox13->Text != "" && textBox14->Text != "") ? (width = System::Convert::ToDouble(textBox14->Text) - System::Convert::ToDouble(textBox13->Text)) : (width = 0);
+	//	(textBox13->Text != "") ? (start = System::Convert::ToDouble(textBox13->Text)) : (start = 0);
+	//	(textBox13->Text != "" && textBox14->Text != "") ? (width = System::Convert::ToDouble(textBox14->Text) - System::Convert::ToDouble(textBox13->Text)) : (width = 0);
 		(width > 0) ? (width = width) : (width = 0);
 		(width == 0) ? (a &= false) : (a &= true);
 		box = gcnew BoxObj(start, 350, width, 350, Color::LightGray, Color::LightGray);// Color.FromArgb(225, 245, 225));
@@ -1294,8 +1296,8 @@ namespace CopterGUI {
 			currZed->MasterPane->PaneList[2]->GraphObjList->Add(text);
 		}
 
-		(textBox15->Text != "") ? (start = System::Convert::ToDouble(textBox15->Text)) : (start = 0);
-		(textBox15->Text != "" && textBox16->Text != "") ? (width = System::Convert::ToDouble(textBox16->Text) - System::Convert::ToDouble(textBox15->Text)) : (width = 0);
+	//	(textBox15->Text != "") ? (start = System::Convert::ToDouble(textBox15->Text)) : (start = 0);
+	//	(textBox15->Text != "" && textBox16->Text != "") ? (width = System::Convert::ToDouble(textBox16->Text) - System::Convert::ToDouble(textBox15->Text)) : (width = 0);
 		(width > 0) ? (width = width) : (width = 0);
 		(width == 0) ? (a &= false) : (a &= true);
 		box = gcnew BoxObj(start, 350, width, 350, Color::LightGray, Color::LightGray);// Color.FromArgb(225, 245, 225));
@@ -1325,7 +1327,7 @@ namespace CopterGUI {
 		currZed->AxisChange();
 		currZed->Invalidate();
 
-		if (a && textBox1->Text != "" && textBox2->Text != "" && textBox3->Text != "" && textBox4->Text != "" && textBox5->Text != ""
+	/*	if (a && textBox1->Text != "" && textBox2->Text != "" && textBox3->Text != "" && textBox4->Text != "" && textBox5->Text != ""
 			&& textBox6->Text != "" && textBox7->Text != "" && textBox8->Text != "" && textBox9->Text != "" && textBox10->Text != ""
 			&& textBox11->Text != "" && textBox12->Text != "" && textBox13->Text != "" && textBox14->Text != "" && textBox15->Text != ""
 			&& textBox16->Text != "" && textBox17->Text != "")
@@ -1335,7 +1337,7 @@ namespace CopterGUI {
 		else
 		{
 			boxesAreDrawedFlag = 0;
-		}
+		}*/
 	}
 
 
@@ -1356,38 +1358,38 @@ namespace CopterGUI {
 							{
 								if (i == 0)
 								{
-									if (ZahvatCheckBox->CheckState == CheckState::Unchecked && j == 0)
+									if (RcPitCheckBox->CheckState == CheckState::Unchecked && j == 0)
 									{
 										break;
 									}
-									if (ARUCheckBox->CheckState == CheckState::Unchecked && j == 1)
+									if (GyroPitCheckBox->CheckState == CheckState::Unchecked && j == 1)
 									{
 										break;
 									}
-									if (ZasvetCheckBox->CheckState == CheckState::Unchecked && j == 2)
+									if (StabPitCheckBox->CheckState == CheckState::Unchecked && j == 2)
 									{
 										break;
 									}
-									if (CounterCheckBox->CheckState == CheckState::Unchecked && j == 3)
+									if (PitOutCheckBox->CheckState == CheckState::Unchecked && j == 3)
 									{
 										break;
 									}
 								}
 								if (i == 3)
 								{
-									if (U1CheckBox->CheckState == CheckState::Unchecked && j == 0)
+									if (RcRollCheckBox->CheckState == CheckState::Unchecked && j == 0)
 									{
 										break;
 									}
-									if (U2CheckBox->CheckState == CheckState::Unchecked && j == 1)
+									if (GyroRollCheckBox->CheckState == CheckState::Unchecked && j == 1)
 									{
 										break;
 									}
-									if (U3CheckBox->CheckState == CheckState::Unchecked && j == 2)
+									if (StabRollCheckBox->CheckState == CheckState::Unchecked && j == 2)
 									{
 										break;
 									}
-									if (U4CheckBox->CheckState == CheckState::Unchecked && j == 3)
+									if (RollOutCheckBox->CheckState == CheckState::Unchecked && j == 3)
 									{
 										break;
 									}
@@ -1435,6 +1437,98 @@ namespace CopterGUI {
 					sender->AxisChange();
 					sender->Invalidate();
 				}
+
+	public:	void ParseHeader(string headerStr) {
+		int startPos = 0, endPos = 0;
+		while (endPos != std::string::npos) {
+			endPos = headerStr.find_first_of('\t', endPos + 1);
+			if (endPos != -1)
+			{
+				string strLineCuted = headerStr.substr(startPos + 1, (endPos - startPos - 1));
+				startPos = endPos;
+				if (strLineCuted == "rcthr") {
+					RcThrCheckBox->Enabled = true;
+					RcThrTextBox->Enabled = true;
+				}
+				else if (strLineCuted == "rcpit") {
+					RcPitCheckBox->Enabled = true;
+					RcPitTextBox->Enabled = true;
+				}
+				else if (strLineCuted == "gyropit") {
+					GyroPitCheckBox->Enabled = true;
+					GyroPitTextBox->Enabled = true;
+				}
+				else if (strLineCuted == "intpit") {
+					IntPitCheckBox->Enabled = true;
+					IntPitTextBox->Enabled = true;
+				}
+				else if (strLineCuted == "stabpit") {
+					StabPitCheckBox->Enabled = true;
+					StabPitTextBox->Enabled = true;
+				}
+				else if (strLineCuted == "pitout") {
+					PitOutCheckBox->Enabled = true;
+					PitOutTextBox->Enabled = true;
+				}
+				else if (strLineCuted == "rcroll") {
+					RcRollCheckBox->Enabled = true;
+					RcRollTextBox->Enabled = true;
+				}
+				else if (strLineCuted == "gyroroll") {
+					GyroRollCheckBox->Enabled = true;
+					GyroRollTextBox->Enabled = true;
+				}
+				else if (strLineCuted == "introll") {
+					IntRollCheckBox->Enabled = true;
+					IntRollTextBox->Enabled = true;
+				}
+				else if (strLineCuted == "stabroll") {
+					StabRollCheckBox->Enabled = true;
+					StabRollTextBox->Enabled = true;
+				}
+				else if (strLineCuted == "rollout") {
+					RollOutCheckBox->Enabled = true;
+					RollOutTextBox->Enabled = true;
+				}
+				else if (strLineCuted == "rcyaw") {
+					RcYawCheckBox->Enabled = true;
+					RcYawTextBox->Enabled = true;
+				}
+				else if (strLineCuted == "gyroyaw") {
+					GyroYawCheckBox->Enabled = true;
+					GyroYawTextBox->Enabled = true;
+				}
+				else if (strLineCuted == "intyaw") {
+					IntYawCheckBox->Enabled = true;
+					IntYawTextBox->Enabled = true;
+				}
+				else if (strLineCuted == "stabyaw") {
+					StabYawCheckBox->Enabled = true;
+					StabYawTextBox->Enabled = true;
+				}
+				else if (strLineCuted == "yawout") {
+					YawOutCheckBox->Enabled = true;
+					YawOutTextBox->Enabled = true;
+				}
+				else if (strLineCuted == "FR") {
+					FRCheckBox->Enabled = true;
+					FRTextBox->Enabled = true;
+				}
+				else if (strLineCuted == "FL") {
+					FLCheckBox->Enabled = true;
+					FLTextBox->Enabled = true;
+				}
+				else if (strLineCuted == "BR") {
+					BRCheckBox->Enabled = true;
+					BRTextBox->Enabled = true;
+				}
+				else if (strLineCuted == "BL") {
+					BLCheckBox->Enabled = true;
+					BLTextBox->Enabled = true;
+				}
+			}
+		}
+	}
 				void startBtnClickHandler(void)
 				{
 
@@ -1450,7 +1544,7 @@ namespace CopterGUI {
 					pelengMaxScale = phaseMaxScale = UMaxScale = 0;
 					if (boxesAreDrawedFlag)
 					{
-						textBox1->Text = "";
+						/*textBox1->Text = "";
 						textBox2->Text = "";
 						textBox3->Text = "";
 						textBox4->Text = "";
@@ -1465,12 +1559,10 @@ namespace CopterGUI {
 						textBox13->Text = "";
 						textBox14->Text = "";
 						textBox15->Text = "";
-						textBox16->Text = "";
+						textBox16->Text = "";*/
 						textBox17->Text = "";
 						textBox18->Text = "";
 						ReDrawBoxes(zedGraphControl1);
-
-						button2->Text = "Find transitions";
 						boxesAreDrawedFlag = 0;
 					}
 				}
@@ -1551,7 +1643,7 @@ namespace CopterGUI {
 					{
 						if (boxesAreDrawedFlag)
 						{
-							textBox1->Text = "";
+							/*textBox1->Text = "";
 							textBox2->Text = "";
 							textBox3->Text = "";
 							textBox4->Text = "";
@@ -1566,12 +1658,10 @@ namespace CopterGUI {
 							textBox13->Text = "";
 							textBox14->Text = "";
 							textBox15->Text = "";
-							textBox16->Text = "";
+							textBox16->Text = "";*/
 							textBox17->Text = "";
 							textBox18->Text = "";
 							ReDrawBoxes(zedGraphControl1);
-
-							button2->Text = "Find transitions";
 							boxesAreDrawedFlag = 0;
 						}
 						else
@@ -1580,7 +1670,6 @@ namespace CopterGUI {
 							progressBar1->Value = 0;
 							Cursor->Current = Cursors::WaitCursor;
 							FindTransitions();
-							button2->Text = "Clear all transitions";
 							boxesAreDrawedFlag = 1;
 						}
 						checkBoxCounter = 0;
@@ -1607,10 +1696,6 @@ namespace CopterGUI {
 						panel1->ForeColor = Color::WhiteSmoke;
 						panel2->BackColor = Color::Black;
 						panel2->ForeColor = Color::WhiteSmoke;
-						panel3->BackColor = Color::Black;
-						panel3->ForeColor = Color::WhiteSmoke;
-						panel4->BackColor = Color::Black;
-						panel4->ForeColor = Color::WhiteSmoke;
 						panel5->BackColor = Color::Black;
 						panel5->ForeColor = Color::WhiteSmoke;
 						tabControl1->BackColor = Color::Black;
@@ -1621,12 +1706,6 @@ namespace CopterGUI {
 						checkBox1->ForeColor = Color::WhiteSmoke;
 						button1->BackColor = Color::Black;
 						button1->ForeColor = Color::WhiteSmoke;
-						button2->BackColor = Color::Black;
-						button2->ForeColor = Color::WhiteSmoke;
-						SendLitBtn->BackColor = Color::Black;
-						SendLitBtn->ForeColor = Color::WhiteSmoke;
-						label29->BackColor = Color::Black;
-						label29->ForeColor = Color::WhiteSmoke;
 						startBtn->BackColor = Color::Black;
 						startBtn->ForeColor = Color::WhiteSmoke;
 						pauseBtn->BackColor = Color::Black;
@@ -1656,10 +1735,6 @@ namespace CopterGUI {
 						panel1->ForeColor = Color::Black;
 						panel2->BackColor = Color::White;
 						panel2->ForeColor = Color::Black;
-						panel3->BackColor = Color::White;
-						panel3->ForeColor = Color::Black;
-						panel4->BackColor = Color::White;
-						panel4->ForeColor = Color::Black;
 						panel5->BackColor = Color::White;
 						panel5->ForeColor = Color::Black;
 						tabControl1->BackColor = Color::White;
@@ -1670,12 +1745,6 @@ namespace CopterGUI {
 						checkBox1->ForeColor = Color::Black;
 						button1->BackColor = Color::White;
 						button1->ForeColor = Color::Black;
-						button2->BackColor = System::Windows::Forms::Form::DefaultBackColor;
-						button2->ForeColor = Color::Black;
-						SendLitBtn->BackColor = System::Windows::Forms::Form::DefaultBackColor;
-						SendLitBtn->ForeColor = Color::Black;
-						label29->BackColor = Color::White;
-						label29->ForeColor = Color::Black;
 						startBtn->BackColor = Color::White;
 						startBtn->ForeColor = Color::Black;
 						pauseBtn->BackColor = Color::White;
@@ -1752,67 +1821,73 @@ namespace CopterGUI {
 			this->zedGraphControl5 = (gcnew ZedGraph::ZedGraphControl());
 			this->tabControl1 = (gcnew System::Windows::Forms::TabControl());
 			this->tabPage1 = (gcnew System::Windows::Forms::TabPage());
+			this->zedGraphControl1 = (gcnew ZedGraph::ZedGraphControl());
 			this->softVerLbl = (gcnew System::Windows::Forms::Label());
 			this->pvkNumberLbl = (gcnew System::Windows::Forms::Label());
 			this->panel7 = (gcnew System::Windows::Forms::Panel());
-			this->VoltageCheckBox = (gcnew System::Windows::Forms::CheckBox());
-			this->LiteraTextBox = (gcnew System::Windows::Forms::TextBox());
-			this->CoordCheckBox = (gcnew System::Windows::Forms::CheckBox());
-			this->SendLitBtn = (gcnew System::Windows::Forms::Button());
-			this->label29 = (gcnew System::Windows::Forms::Label());
+			this->RolEnAllCheckBox = (gcnew System::Windows::Forms::CheckBox());
+			this->PitEnAllCheckBox = (gcnew System::Windows::Forms::CheckBox());
 			this->panel6 = (gcnew System::Windows::Forms::Panel());
-			this->button2 = (gcnew System::Windows::Forms::Button());
-			this->label3 = (gcnew System::Windows::Forms::Label());
-			this->textBox1 = (gcnew System::Windows::Forms::TextBox());
-			this->textBox2 = (gcnew System::Windows::Forms::TextBox());
-			this->label5 = (gcnew System::Windows::Forms::Label());
+			this->label29 = (gcnew System::Windows::Forms::Label());
+			this->RcThrTextBox = (gcnew System::Windows::Forms::TextBox());
+			this->RcThrCheckBox = (gcnew System::Windows::Forms::CheckBox());
+			this->MotorEnAllCheckBox = (gcnew System::Windows::Forms::CheckBox());
+			this->FRCheckBox = (gcnew System::Windows::Forms::CheckBox());
+			this->BRCheckBox = (gcnew System::Windows::Forms::CheckBox());
+			this->FLCheckBox = (gcnew System::Windows::Forms::CheckBox());
+			this->BLCheckBox = (gcnew System::Windows::Forms::CheckBox());
+			this->label17 = (gcnew System::Windows::Forms::Label());
+			this->BRTextBox = (gcnew System::Windows::Forms::TextBox());
+			this->label15 = (gcnew System::Windows::Forms::Label());
+			this->BLTextBox = (gcnew System::Windows::Forms::TextBox());
+			this->label13 = (gcnew System::Windows::Forms::Label());
+			this->FRTextBox = (gcnew System::Windows::Forms::TextBox());
+			this->label11 = (gcnew System::Windows::Forms::Label());
+			this->FLTextBox = (gcnew System::Windows::Forms::TextBox());
 			this->label19 = (gcnew System::Windows::Forms::Label());
 			this->textBox17 = (gcnew System::Windows::Forms::TextBox());
 			this->textBox18 = (gcnew System::Windows::Forms::TextBox());
 			this->label20 = (gcnew System::Windows::Forms::Label());
-			this->label17 = (gcnew System::Windows::Forms::Label());
-			this->textBox15 = (gcnew System::Windows::Forms::TextBox());
-			this->textBox16 = (gcnew System::Windows::Forms::TextBox());
-			this->label6 = (gcnew System::Windows::Forms::Label());
+			this->YawOutTextBox = (gcnew System::Windows::Forms::TextBox());
 			this->label18 = (gcnew System::Windows::Forms::Label());
-			this->textBox4 = (gcnew System::Windows::Forms::TextBox());
-			this->label15 = (gcnew System::Windows::Forms::Label());
-			this->textBox3 = (gcnew System::Windows::Forms::TextBox());
-			this->textBox13 = (gcnew System::Windows::Forms::TextBox());
-			this->label4 = (gcnew System::Windows::Forms::Label());
-			this->textBox14 = (gcnew System::Windows::Forms::TextBox());
-			this->label8 = (gcnew System::Windows::Forms::Label());
+			this->StabYawTextBox = (gcnew System::Windows::Forms::TextBox());
 			this->label16 = (gcnew System::Windows::Forms::Label());
-			this->textBox6 = (gcnew System::Windows::Forms::TextBox());
-			this->label13 = (gcnew System::Windows::Forms::Label());
-			this->textBox5 = (gcnew System::Windows::Forms::TextBox());
-			this->textBox11 = (gcnew System::Windows::Forms::TextBox());
-			this->label7 = (gcnew System::Windows::Forms::Label());
-			this->textBox12 = (gcnew System::Windows::Forms::TextBox());
-			this->label10 = (gcnew System::Windows::Forms::Label());
+			this->GyroYawTextBox = (gcnew System::Windows::Forms::TextBox());
 			this->label14 = (gcnew System::Windows::Forms::Label());
-			this->textBox8 = (gcnew System::Windows::Forms::TextBox());
-			this->label11 = (gcnew System::Windows::Forms::Label());
-			this->textBox7 = (gcnew System::Windows::Forms::TextBox());
-			this->textBox9 = (gcnew System::Windows::Forms::TextBox());
-			this->label9 = (gcnew System::Windows::Forms::Label());
-			this->textBox10 = (gcnew System::Windows::Forms::TextBox());
+			this->RcYawTextBox = (gcnew System::Windows::Forms::TextBox());
 			this->label12 = (gcnew System::Windows::Forms::Label());
+			this->label8 = (gcnew System::Windows::Forms::Label());
+			this->GyroRollTextBox = (gcnew System::Windows::Forms::TextBox());
+			this->RcRollTextBox = (gcnew System::Windows::Forms::TextBox());
+			this->label7 = (gcnew System::Windows::Forms::Label());
+			this->label10 = (gcnew System::Windows::Forms::Label());
+			this->RollOutTextBox = (gcnew System::Windows::Forms::TextBox());
+			this->StabRollTextBox = (gcnew System::Windows::Forms::TextBox());
+			this->label9 = (gcnew System::Windows::Forms::Label());
+			this->label3 = (gcnew System::Windows::Forms::Label());
+			this->RcPitTextBox = (gcnew System::Windows::Forms::TextBox());
+			this->GyroPitTextBox = (gcnew System::Windows::Forms::TextBox());
+			this->label5 = (gcnew System::Windows::Forms::Label());
+			this->label6 = (gcnew System::Windows::Forms::Label());
+			this->PitOutTextBox = (gcnew System::Windows::Forms::TextBox());
+			this->StabPitTextBox = (gcnew System::Windows::Forms::TextBox());
+			this->label4 = (gcnew System::Windows::Forms::Label());
 			this->panel5 = (gcnew System::Windows::Forms::Panel());
-			this->U2CheckBox = (gcnew System::Windows::Forms::CheckBox());
-			this->U3CheckBox = (gcnew System::Windows::Forms::CheckBox());
-			this->U1CheckBox = (gcnew System::Windows::Forms::CheckBox());
-			this->U4CheckBox = (gcnew System::Windows::Forms::CheckBox());
-			this->panel4 = (gcnew System::Windows::Forms::Panel());
-			this->PhaseCheckBox = (gcnew System::Windows::Forms::CheckBox());
-			this->panel3 = (gcnew System::Windows::Forms::Panel());
-			this->PelengCheckBox = (gcnew System::Windows::Forms::CheckBox());
+			this->IntRollCheckBox = (gcnew System::Windows::Forms::CheckBox());
+			this->IntRollTextBox = (gcnew System::Windows::Forms::TextBox());
+			this->label31 = (gcnew System::Windows::Forms::Label());
+			this->GyroRollCheckBox = (gcnew System::Windows::Forms::CheckBox());
+			this->RollOutCheckBox = (gcnew System::Windows::Forms::CheckBox());
+			this->RcRollCheckBox = (gcnew System::Windows::Forms::CheckBox());
+			this->StabRollCheckBox = (gcnew System::Windows::Forms::CheckBox());
 			this->panel2 = (gcnew System::Windows::Forms::Panel());
-			this->CounterCheckBox = (gcnew System::Windows::Forms::CheckBox());
-			this->ZasvetCheckBox = (gcnew System::Windows::Forms::CheckBox());
-			this->ARUCheckBox = (gcnew System::Windows::Forms::CheckBox());
-			this->ZahvatCheckBox = (gcnew System::Windows::Forms::CheckBox());
-			this->zedGraphControl1 = (gcnew ZedGraph::ZedGraphControl());
+			this->label32 = (gcnew System::Windows::Forms::Label());
+			this->IntPitTextBox = (gcnew System::Windows::Forms::TextBox());
+			this->IntPitCheckBox = (gcnew System::Windows::Forms::CheckBox());
+			this->PitOutCheckBox = (gcnew System::Windows::Forms::CheckBox());
+			this->GyroPitCheckBox = (gcnew System::Windows::Forms::CheckBox());
+			this->StabPitCheckBox = (gcnew System::Windows::Forms::CheckBox());
+			this->RcPitCheckBox = (gcnew System::Windows::Forms::CheckBox());
 			this->checkBox1 = (gcnew System::Windows::Forms::CheckBox());
 			this->panel1 = (gcnew System::Windows::Forms::Panel());
 			this->progressBar1 = (gcnew System::Windows::Forms::ProgressBar());
@@ -1828,16 +1903,23 @@ namespace CopterGUI {
 			this->toolTip5 = (gcnew System::Windows::Forms::ToolTip(this->components));
 			this->toolTip6 = (gcnew System::Windows::Forms::ToolTip(this->components));
 			this->toolTip7 = (gcnew System::Windows::Forms::ToolTip(this->components));
+			this->panel3 = (gcnew System::Windows::Forms::Panel());
+			this->IntYawCheckBox = (gcnew System::Windows::Forms::CheckBox());
+			this->IntYawTextBox = (gcnew System::Windows::Forms::TextBox());
+			this->label30 = (gcnew System::Windows::Forms::Label());
+			this->YawEnAllCheckBox = (gcnew System::Windows::Forms::CheckBox());
+			this->GyroYawCheckBox = (gcnew System::Windows::Forms::CheckBox());
+			this->YawOutCheckBox = (gcnew System::Windows::Forms::CheckBox());
+			this->RcYawCheckBox = (gcnew System::Windows::Forms::CheckBox());
+			this->StabYawCheckBox = (gcnew System::Windows::Forms::CheckBox());
 			this->tabPage5->SuspendLayout();
 			this->tabControl1->SuspendLayout();
 			this->tabPage1->SuspendLayout();
-			this->panel7->SuspendLayout();
 			this->panel6->SuspendLayout();
 			this->panel5->SuspendLayout();
-			this->panel4->SuspendLayout();
-			this->panel3->SuspendLayout();
 			this->panel2->SuspendLayout();
 			this->panel1->SuspendLayout();
+			this->panel3->SuspendLayout();
 			this->SuspendLayout();
 			// 
 			// button1
@@ -1936,7 +2018,7 @@ namespace CopterGUI {
 			this->tabPage5->Location = System::Drawing::Point(4, 25);
 			this->tabPage5->Name = L"tabPage5";
 			this->tabPage5->Padding = System::Windows::Forms::Padding(3);
-			this->tabPage5->Size = System::Drawing::Size(1203, 608);
+			this->tabPage5->Size = System::Drawing::Size(1026, 608);
 			this->tabPage5->TabIndex = 4;
 			this->tabPage5->Text = L"Calculated data";
 			this->tabPage5->UseVisualStyleBackColor = true;
@@ -2116,698 +2198,19 @@ namespace CopterGUI {
 			this->tabControl1->Location = System::Drawing::Point(0, 47);
 			this->tabControl1->Name = L"tabControl1";
 			this->tabControl1->SelectedIndex = 0;
-			this->tabControl1->Size = System::Drawing::Size(1211, 637);
+			this->tabControl1->Size = System::Drawing::Size(1034, 637);
 			this->tabControl1->TabIndex = 11;
 			// 
 			// tabPage1
 			// 
-			this->tabPage1->Controls->Add(this->softVerLbl);
-			this->tabPage1->Controls->Add(this->pvkNumberLbl);
-			this->tabPage1->Controls->Add(this->panel7);
-			this->tabPage1->Controls->Add(this->label29);
-			this->tabPage1->Controls->Add(this->panel6);
-			this->tabPage1->Controls->Add(this->panel5);
-			this->tabPage1->Controls->Add(this->panel4);
-			this->tabPage1->Controls->Add(this->panel3);
-			this->tabPage1->Controls->Add(this->panel2);
 			this->tabPage1->Controls->Add(this->zedGraphControl1);
 			this->tabPage1->Location = System::Drawing::Point(4, 25);
 			this->tabPage1->Name = L"tabPage1";
 			this->tabPage1->Padding = System::Windows::Forms::Padding(3);
-			this->tabPage1->Size = System::Drawing::Size(1203, 608);
+			this->tabPage1->Size = System::Drawing::Size(1026, 608);
 			this->tabPage1->TabIndex = 0;
 			this->tabPage1->Text = L"Input data";
 			this->tabPage1->UseVisualStyleBackColor = true;
-			// 
-			// softVerLbl
-			// 
-			this->softVerLbl->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
-			this->softVerLbl->AutoSize = true;
-			this->softVerLbl->Location = System::Drawing::Point(1137, 509);
-			this->softVerLbl->Name = L"softVerLbl";
-			this->softVerLbl->Size = System::Drawing::Size(18, 16);
-			this->softVerLbl->TabIndex = 204;
-			this->softVerLbl->Text = L"v.";
-			// 
-			// pvkNumberLbl
-			// 
-			this->pvkNumberLbl->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
-			this->pvkNumberLbl->AutoSize = true;
-			this->pvkNumberLbl->Location = System::Drawing::Point(1020, 509);
-			this->pvkNumberLbl->Name = L"pvkNumberLbl";
-			this->pvkNumberLbl->Size = System::Drawing::Size(52, 16);
-			this->pvkNumberLbl->TabIndex = 203;
-			this->pvkNumberLbl->Text = L"ПВК №";
-			// 
-			// panel7
-			// 
-			this->panel7->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
-			this->panel7->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
-			this->panel7->Controls->Add(this->VoltageCheckBox);
-			this->panel7->Controls->Add(this->LiteraTextBox);
-			this->panel7->Controls->Add(this->CoordCheckBox);
-			this->panel7->Controls->Add(this->SendLitBtn);
-			this->panel7->Location = System::Drawing::Point(1020, 149);
-			this->panel7->Name = L"panel7";
-			this->panel7->Size = System::Drawing::Size(175, 60);
-			this->panel7->TabIndex = 202;
-			// 
-			// VoltageCheckBox
-			// 
-			this->VoltageCheckBox->AutoSize = true;
-			this->VoltageCheckBox->Checked = true;
-			this->VoltageCheckBox->CheckState = System::Windows::Forms::CheckState::Checked;
-			this->VoltageCheckBox->Location = System::Drawing::Point(105, 31);
-			this->VoltageCheckBox->Name = L"VoltageCheckBox";
-			this->VoltageCheckBox->Size = System::Drawing::Size(74, 20);
-			this->VoltageCheckBox->TabIndex = 24;
-			this->VoltageCheckBox->Text = L"Voltage";
-			this->VoltageCheckBox->UseVisualStyleBackColor = true;
-			// 
-			// LiteraTextBox
-			// 
-			this->LiteraTextBox->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
-			this->LiteraTextBox->Location = System::Drawing::Point(119, 4);
-			this->LiteraTextBox->Name = L"LiteraTextBox";
-			this->LiteraTextBox->Size = System::Drawing::Size(51, 22);
-			this->LiteraTextBox->TabIndex = 201;
-			// 
-			// CoordCheckBox
-			// 
-			this->CoordCheckBox->AutoSize = true;
-			this->CoordCheckBox->Checked = true;
-			this->CoordCheckBox->CheckState = System::Windows::Forms::CheckState::Checked;
-			this->CoordCheckBox->Location = System::Drawing::Point(6, 31);
-			this->CoordCheckBox->Name = L"CoordCheckBox";
-			this->CoordCheckBox->Size = System::Drawing::Size(71, 20);
-			this->CoordCheckBox->TabIndex = 23;
-			this->CoordCheckBox->Text = L"Coords";
-			this->CoordCheckBox->UseVisualStyleBackColor = true;
-			// 
-			// SendLitBtn
-			// 
-			this->SendLitBtn->Location = System::Drawing::Point(6, 2);
-			this->SendLitBtn->Name = L"SendLitBtn";
-			this->SendLitBtn->Size = System::Drawing::Size(107, 25);
-			this->SendLitBtn->TabIndex = 201;
-			this->SendLitBtn->Text = L"Send litera, Hz";
-			this->SendLitBtn->UseVisualStyleBackColor = true;
-			this->SendLitBtn->Click += gcnew System::EventHandler(this, &GuiForm::SendLitBtn_Click);
-			// 
-			// label29
-			// 
-			this->label29->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
-			this->label29->AutoSize = true;
-			this->label29->BackColor = System::Drawing::Color::White;
-			this->label29->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
-			this->label29->Location = System::Drawing::Point(1055, 214);
-			this->label29->Name = L"label29";
-			this->label29->Size = System::Drawing::Size(111, 18);
-			this->label29->TabIndex = 200;
-			this->label29->Text = L"Calibration panel";
-			// 
-			// panel6
-			// 
-			this->panel6->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
-			this->panel6->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
-			this->panel6->Controls->Add(this->button2);
-			this->panel6->Controls->Add(this->label3);
-			this->panel6->Controls->Add(this->textBox1);
-			this->panel6->Controls->Add(this->textBox2);
-			this->panel6->Controls->Add(this->label5);
-			this->panel6->Controls->Add(this->label19);
-			this->panel6->Controls->Add(this->textBox17);
-			this->panel6->Controls->Add(this->textBox18);
-			this->panel6->Controls->Add(this->label20);
-			this->panel6->Controls->Add(this->label17);
-			this->panel6->Controls->Add(this->textBox15);
-			this->panel6->Controls->Add(this->textBox16);
-			this->panel6->Controls->Add(this->label6);
-			this->panel6->Controls->Add(this->label18);
-			this->panel6->Controls->Add(this->textBox4);
-			this->panel6->Controls->Add(this->label15);
-			this->panel6->Controls->Add(this->textBox3);
-			this->panel6->Controls->Add(this->textBox13);
-			this->panel6->Controls->Add(this->label4);
-			this->panel6->Controls->Add(this->textBox14);
-			this->panel6->Controls->Add(this->label8);
-			this->panel6->Controls->Add(this->label16);
-			this->panel6->Controls->Add(this->textBox6);
-			this->panel6->Controls->Add(this->label13);
-			this->panel6->Controls->Add(this->textBox5);
-			this->panel6->Controls->Add(this->textBox11);
-			this->panel6->Controls->Add(this->label7);
-			this->panel6->Controls->Add(this->textBox12);
-			this->panel6->Controls->Add(this->label10);
-			this->panel6->Controls->Add(this->label14);
-			this->panel6->Controls->Add(this->textBox8);
-			this->panel6->Controls->Add(this->label11);
-			this->panel6->Controls->Add(this->textBox7);
-			this->panel6->Controls->Add(this->textBox9);
-			this->panel6->Controls->Add(this->label9);
-			this->panel6->Controls->Add(this->textBox10);
-			this->panel6->Controls->Add(this->label12);
-			this->panel6->Location = System::Drawing::Point(1020, 222);
-			this->panel6->Name = L"panel6";
-			this->panel6->Size = System::Drawing::Size(175, 284);
-			this->panel6->TabIndex = 164;
-			// 
-			// button2
-			// 
-			this->button2->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
-			this->button2->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(204)));
-			this->button2->Location = System::Drawing::Point(1, 12);
-			this->button2->Name = L"button2";
-			this->button2->Size = System::Drawing::Size(170, 30);
-			this->button2->TabIndex = 200;
-			this->button2->Text = L"Find transitions";
-			this->button2->UseVisualStyleBackColor = true;
-			this->button2->Click += gcnew System::EventHandler(this, &GuiForm::button2_Click);
-			// 
-			// label3
-			// 
-			this->label3->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
-			this->label3->AutoSize = true;
-			this->label3->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(204)));
-			this->label3->Location = System::Drawing::Point(-2, 52);
-			this->label3->Name = L"label3";
-			this->label3->Size = System::Drawing::Size(51, 16);
-			this->label3->TabIndex = 164;
-			this->label3->Text = L"1: Start:";
-			// 
-			// textBox1
-			// 
-			this->textBox1->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
-			this->textBox1->Location = System::Drawing::Point(49, 47);
-			this->textBox1->Name = L"textBox1";
-			this->textBox1->Size = System::Drawing::Size(44, 22);
-			this->textBox1->TabIndex = 165;
-			// 
-			// textBox2
-			// 
-			this->textBox2->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
-			this->textBox2->Location = System::Drawing::Point(128, 47);
-			this->textBox2->Name = L"textBox2";
-			this->textBox2->Size = System::Drawing::Size(44, 22);
-			this->textBox2->TabIndex = 166;
-			// 
-			// label5
-			// 
-			this->label5->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
-			this->label5->AutoSize = true;
-			this->label5->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(204)));
-			this->label5->Location = System::Drawing::Point(94, 52);
-			this->label5->Name = L"label5";
-			this->label5->Size = System::Drawing::Size(35, 16);
-			this->label5->TabIndex = 167;
-			this->label5->Text = L"End:";
-			// 
-			// label19
-			// 
-			this->label19->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
-			this->label19->AutoSize = true;
-			this->label19->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(204)));
-			this->label19->Location = System::Drawing::Point(93, 260);
-			this->label19->Name = L"label19";
-			this->label19->Size = System::Drawing::Size(35, 16);
-			this->label19->TabIndex = 199;
-			this->label19->Text = L"End:";
-			// 
-			// textBox17
-			// 
-			this->textBox17->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
-			this->textBox17->Location = System::Drawing::Point(49, 255);
-			this->textBox17->Name = L"textBox17";
-			this->textBox17->Size = System::Drawing::Size(44, 22);
-			this->textBox17->TabIndex = 198;
-			// 
-			// textBox18
-			// 
-			this->textBox18->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
-			this->textBox18->Location = System::Drawing::Point(128, 255);
-			this->textBox18->Name = L"textBox18";
-			this->textBox18->Size = System::Drawing::Size(44, 22);
-			this->textBox18->TabIndex = 197;
-			// 
-			// label20
-			// 
-			this->label20->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
-			this->label20->AutoSize = true;
-			this->label20->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(204)));
-			this->label20->Location = System::Drawing::Point(-2, 260);
-			this->label20->Name = L"label20";
-			this->label20->Size = System::Drawing::Size(51, 16);
-			this->label20->TabIndex = 196;
-			this->label20->Text = L"9: Start:";
-			// 
-			// label17
-			// 
-			this->label17->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
-			this->label17->AutoSize = true;
-			this->label17->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(204)));
-			this->label17->Location = System::Drawing::Point(93, 234);
-			this->label17->Name = L"label17";
-			this->label17->Size = System::Drawing::Size(35, 16);
-			this->label17->TabIndex = 195;
-			this->label17->Text = L"End:";
-			// 
-			// textBox15
-			// 
-			this->textBox15->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
-			this->textBox15->Location = System::Drawing::Point(49, 229);
-			this->textBox15->Name = L"textBox15";
-			this->textBox15->Size = System::Drawing::Size(44, 22);
-			this->textBox15->TabIndex = 194;
-			// 
-			// textBox16
-			// 
-			this->textBox16->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
-			this->textBox16->Location = System::Drawing::Point(128, 229);
-			this->textBox16->Name = L"textBox16";
-			this->textBox16->Size = System::Drawing::Size(44, 22);
-			this->textBox16->TabIndex = 193;
-			// 
-			// label6
-			// 
-			this->label6->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
-			this->label6->AutoSize = true;
-			this->label6->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(204)));
-			this->label6->Location = System::Drawing::Point(-2, 78);
-			this->label6->Name = L"label6";
-			this->label6->Size = System::Drawing::Size(51, 16);
-			this->label6->TabIndex = 168;
-			this->label6->Text = L"2: Start:";
-			// 
-			// label18
-			// 
-			this->label18->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
-			this->label18->AutoSize = true;
-			this->label18->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(204)));
-			this->label18->Location = System::Drawing::Point(-2, 234);
-			this->label18->Name = L"label18";
-			this->label18->Size = System::Drawing::Size(51, 16);
-			this->label18->TabIndex = 192;
-			this->label18->Text = L"8: Start:";
-			// 
-			// textBox4
-			// 
-			this->textBox4->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
-			this->textBox4->Location = System::Drawing::Point(128, 73);
-			this->textBox4->Name = L"textBox4";
-			this->textBox4->Size = System::Drawing::Size(44, 22);
-			this->textBox4->TabIndex = 169;
-			// 
-			// label15
-			// 
-			this->label15->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
-			this->label15->AutoSize = true;
-			this->label15->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(204)));
-			this->label15->Location = System::Drawing::Point(93, 208);
-			this->label15->Name = L"label15";
-			this->label15->Size = System::Drawing::Size(35, 16);
-			this->label15->TabIndex = 191;
-			this->label15->Text = L"End:";
-			// 
-			// textBox3
-			// 
-			this->textBox3->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
-			this->textBox3->Location = System::Drawing::Point(49, 73);
-			this->textBox3->Name = L"textBox3";
-			this->textBox3->Size = System::Drawing::Size(44, 22);
-			this->textBox3->TabIndex = 170;
-			// 
-			// textBox13
-			// 
-			this->textBox13->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
-			this->textBox13->Location = System::Drawing::Point(49, 203);
-			this->textBox13->Name = L"textBox13";
-			this->textBox13->Size = System::Drawing::Size(44, 22);
-			this->textBox13->TabIndex = 190;
-			// 
-			// label4
-			// 
-			this->label4->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
-			this->label4->AutoSize = true;
-			this->label4->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(204)));
-			this->label4->Location = System::Drawing::Point(94, 78);
-			this->label4->Name = L"label4";
-			this->label4->Size = System::Drawing::Size(35, 16);
-			this->label4->TabIndex = 171;
-			this->label4->Text = L"End:";
-			// 
-			// textBox14
-			// 
-			this->textBox14->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
-			this->textBox14->Location = System::Drawing::Point(128, 203);
-			this->textBox14->Name = L"textBox14";
-			this->textBox14->Size = System::Drawing::Size(44, 22);
-			this->textBox14->TabIndex = 189;
-			// 
-			// label8
-			// 
-			this->label8->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
-			this->label8->AutoSize = true;
-			this->label8->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(204)));
-			this->label8->Location = System::Drawing::Point(-2, 104);
-			this->label8->Name = L"label8";
-			this->label8->Size = System::Drawing::Size(51, 16);
-			this->label8->TabIndex = 172;
-			this->label8->Text = L"3: Start:";
-			// 
-			// label16
-			// 
-			this->label16->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
-			this->label16->AutoSize = true;
-			this->label16->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(204)));
-			this->label16->Location = System::Drawing::Point(-2, 208);
-			this->label16->Name = L"label16";
-			this->label16->Size = System::Drawing::Size(51, 16);
-			this->label16->TabIndex = 188;
-			this->label16->Text = L"7: Start:";
-			// 
-			// textBox6
-			// 
-			this->textBox6->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
-			this->textBox6->Location = System::Drawing::Point(128, 99);
-			this->textBox6->Name = L"textBox6";
-			this->textBox6->Size = System::Drawing::Size(44, 22);
-			this->textBox6->TabIndex = 173;
-			// 
-			// label13
-			// 
-			this->label13->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
-			this->label13->AutoSize = true;
-			this->label13->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(204)));
-			this->label13->Location = System::Drawing::Point(93, 182);
-			this->label13->Name = L"label13";
-			this->label13->Size = System::Drawing::Size(35, 16);
-			this->label13->TabIndex = 187;
-			this->label13->Text = L"End:";
-			// 
-			// textBox5
-			// 
-			this->textBox5->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
-			this->textBox5->Location = System::Drawing::Point(49, 99);
-			this->textBox5->Name = L"textBox5";
-			this->textBox5->Size = System::Drawing::Size(44, 22);
-			this->textBox5->TabIndex = 174;
-			// 
-			// textBox11
-			// 
-			this->textBox11->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
-			this->textBox11->Location = System::Drawing::Point(49, 177);
-			this->textBox11->Name = L"textBox11";
-			this->textBox11->Size = System::Drawing::Size(44, 22);
-			this->textBox11->TabIndex = 186;
-			// 
-			// label7
-			// 
-			this->label7->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
-			this->label7->AutoSize = true;
-			this->label7->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(204)));
-			this->label7->Location = System::Drawing::Point(94, 104);
-			this->label7->Name = L"label7";
-			this->label7->Size = System::Drawing::Size(35, 16);
-			this->label7->TabIndex = 175;
-			this->label7->Text = L"End:";
-			// 
-			// textBox12
-			// 
-			this->textBox12->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
-			this->textBox12->Location = System::Drawing::Point(128, 177);
-			this->textBox12->Name = L"textBox12";
-			this->textBox12->Size = System::Drawing::Size(44, 22);
-			this->textBox12->TabIndex = 185;
-			// 
-			// label10
-			// 
-			this->label10->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
-			this->label10->AutoSize = true;
-			this->label10->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(204)));
-			this->label10->Location = System::Drawing::Point(-2, 130);
-			this->label10->Name = L"label10";
-			this->label10->Size = System::Drawing::Size(51, 16);
-			this->label10->TabIndex = 176;
-			this->label10->Text = L"4: Start:";
-			// 
-			// label14
-			// 
-			this->label14->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
-			this->label14->AutoSize = true;
-			this->label14->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(204)));
-			this->label14->Location = System::Drawing::Point(-2, 182);
-			this->label14->Name = L"label14";
-			this->label14->Size = System::Drawing::Size(51, 16);
-			this->label14->TabIndex = 184;
-			this->label14->Text = L"6: Start:";
-			// 
-			// textBox8
-			// 
-			this->textBox8->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
-			this->textBox8->Location = System::Drawing::Point(128, 125);
-			this->textBox8->Name = L"textBox8";
-			this->textBox8->Size = System::Drawing::Size(44, 22);
-			this->textBox8->TabIndex = 177;
-			// 
-			// label11
-			// 
-			this->label11->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
-			this->label11->AutoSize = true;
-			this->label11->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(204)));
-			this->label11->Location = System::Drawing::Point(93, 156);
-			this->label11->Name = L"label11";
-			this->label11->Size = System::Drawing::Size(35, 16);
-			this->label11->TabIndex = 183;
-			this->label11->Text = L"End:";
-			// 
-			// textBox7
-			// 
-			this->textBox7->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
-			this->textBox7->Location = System::Drawing::Point(49, 125);
-			this->textBox7->Name = L"textBox7";
-			this->textBox7->Size = System::Drawing::Size(44, 22);
-			this->textBox7->TabIndex = 178;
-			// 
-			// textBox9
-			// 
-			this->textBox9->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
-			this->textBox9->Location = System::Drawing::Point(49, 151);
-			this->textBox9->Name = L"textBox9";
-			this->textBox9->Size = System::Drawing::Size(44, 22);
-			this->textBox9->TabIndex = 182;
-			// 
-			// label9
-			// 
-			this->label9->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
-			this->label9->AutoSize = true;
-			this->label9->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(204)));
-			this->label9->Location = System::Drawing::Point(94, 130);
-			this->label9->Name = L"label9";
-			this->label9->Size = System::Drawing::Size(35, 16);
-			this->label9->TabIndex = 179;
-			this->label9->Text = L"End:";
-			// 
-			// textBox10
-			// 
-			this->textBox10->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
-			this->textBox10->Location = System::Drawing::Point(128, 151);
-			this->textBox10->Name = L"textBox10";
-			this->textBox10->Size = System::Drawing::Size(44, 22);
-			this->textBox10->TabIndex = 181;
-			// 
-			// label12
-			// 
-			this->label12->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
-			this->label12->AutoSize = true;
-			this->label12->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(204)));
-			this->label12->Location = System::Drawing::Point(-2, 156);
-			this->label12->Name = L"label12";
-			this->label12->Size = System::Drawing::Size(51, 16);
-			this->label12->TabIndex = 180;
-			this->label12->Text = L"5: Start:";
-			// 
-			// panel5
-			// 
-			this->panel5->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
-			this->panel5->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
-			this->panel5->Controls->Add(this->U2CheckBox);
-			this->panel5->Controls->Add(this->U3CheckBox);
-			this->panel5->Controls->Add(this->U1CheckBox);
-			this->panel5->Controls->Add(this->U4CheckBox);
-			this->panel5->Location = System::Drawing::Point(1020, 99);
-			this->panel5->Name = L"panel5";
-			this->panel5->Size = System::Drawing::Size(175, 45);
-			this->panel5->TabIndex = 95;
-			// 
-			// U2CheckBox
-			// 
-			this->U2CheckBox->AutoSize = true;
-			this->U2CheckBox->Checked = true;
-			this->U2CheckBox->CheckState = System::Windows::Forms::CheckState::Checked;
-			this->U2CheckBox->Location = System::Drawing::Point(8, 21);
-			this->U2CheckBox->Name = L"U2CheckBox";
-			this->U2CheckBox->Size = System::Drawing::Size(44, 20);
-			this->U2CheckBox->TabIndex = 24;
-			this->U2CheckBox->Text = L"U2";
-			this->U2CheckBox->UseVisualStyleBackColor = true;
-			// 
-			// U3CheckBox
-			// 
-			this->U3CheckBox->AutoSize = true;
-			this->U3CheckBox->Checked = true;
-			this->U3CheckBox->CheckState = System::Windows::Forms::CheckState::Checked;
-			this->U3CheckBox->Location = System::Drawing::Point(105, 21);
-			this->U3CheckBox->Name = L"U3CheckBox";
-			this->U3CheckBox->Size = System::Drawing::Size(44, 20);
-			this->U3CheckBox->TabIndex = 23;
-			this->U3CheckBox->Text = L"U3";
-			this->U3CheckBox->UseVisualStyleBackColor = true;
-			// 
-			// U1CheckBox
-			// 
-			this->U1CheckBox->AutoSize = true;
-			this->U1CheckBox->Checked = true;
-			this->U1CheckBox->CheckState = System::Windows::Forms::CheckState::Checked;
-			this->U1CheckBox->Location = System::Drawing::Point(8, 2);
-			this->U1CheckBox->Name = L"U1CheckBox";
-			this->U1CheckBox->Size = System::Drawing::Size(44, 20);
-			this->U1CheckBox->TabIndex = 22;
-			this->U1CheckBox->Text = L"U1";
-			this->U1CheckBox->UseVisualStyleBackColor = true;
-			// 
-			// U4CheckBox
-			// 
-			this->U4CheckBox->AutoSize = true;
-			this->U4CheckBox->Checked = true;
-			this->U4CheckBox->CheckState = System::Windows::Forms::CheckState::Checked;
-			this->U4CheckBox->Location = System::Drawing::Point(105, 2);
-			this->U4CheckBox->Name = L"U4CheckBox";
-			this->U4CheckBox->Size = System::Drawing::Size(44, 20);
-			this->U4CheckBox->TabIndex = 21;
-			this->U4CheckBox->Text = L"U4";
-			this->U4CheckBox->UseVisualStyleBackColor = true;
-			// 
-			// panel4
-			// 
-			this->panel4->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
-			this->panel4->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
-			this->panel4->Controls->Add(this->PhaseCheckBox);
-			this->panel4->Location = System::Drawing::Point(1020, 74);
-			this->panel4->Name = L"panel4";
-			this->panel4->Size = System::Drawing::Size(175, 26);
-			this->panel4->TabIndex = 94;
-			// 
-			// PhaseCheckBox
-			// 
-			this->PhaseCheckBox->AutoSize = true;
-			this->PhaseCheckBox->Checked = true;
-			this->PhaseCheckBox->CheckState = System::Windows::Forms::CheckState::Checked;
-			this->PhaseCheckBox->Location = System::Drawing::Point(48, 3);
-			this->PhaseCheckBox->Name = L"PhaseCheckBox";
-			this->PhaseCheckBox->Size = System::Drawing::Size(66, 20);
-			this->PhaseCheckBox->TabIndex = 16;
-			this->PhaseCheckBox->Text = L"Phase";
-			this->PhaseCheckBox->UseVisualStyleBackColor = true;
-			// 
-			// panel3
-			// 
-			this->panel3->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
-			this->panel3->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
-			this->panel3->Controls->Add(this->PelengCheckBox);
-			this->panel3->Location = System::Drawing::Point(1020, 49);
-			this->panel3->Name = L"panel3";
-			this->panel3->Size = System::Drawing::Size(175, 26);
-			this->panel3->TabIndex = 93;
-			// 
-			// PelengCheckBox
-			// 
-			this->PelengCheckBox->AutoSize = true;
-			this->PelengCheckBox->Checked = true;
-			this->PelengCheckBox->CheckState = System::Windows::Forms::CheckState::Checked;
-			this->PelengCheckBox->Location = System::Drawing::Point(47, 3);
-			this->PelengCheckBox->Name = L"PelengCheckBox";
-			this->PelengCheckBox->Size = System::Drawing::Size(70, 20);
-			this->PelengCheckBox->TabIndex = 10;
-			this->PelengCheckBox->Text = L"Peleng";
-			this->PelengCheckBox->UseVisualStyleBackColor = true;
-			// 
-			// panel2
-			// 
-			this->panel2->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
-			this->panel2->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
-			this->panel2->Controls->Add(this->CounterCheckBox);
-			this->panel2->Controls->Add(this->ZasvetCheckBox);
-			this->panel2->Controls->Add(this->ARUCheckBox);
-			this->panel2->Controls->Add(this->ZahvatCheckBox);
-			this->panel2->Location = System::Drawing::Point(1020, 6);
-			this->panel2->Name = L"panel2";
-			this->panel2->Size = System::Drawing::Size(175, 44);
-			this->panel2->TabIndex = 92;
-			// 
-			// CounterCheckBox
-			// 
-			this->CounterCheckBox->AutoSize = true;
-			this->CounterCheckBox->Location = System::Drawing::Point(105, 22);
-			this->CounterCheckBox->Name = L"CounterCheckBox";
-			this->CounterCheckBox->Size = System::Drawing::Size(73, 20);
-			this->CounterCheckBox->TabIndex = 4;
-			this->CounterCheckBox->Text = L"Counter";
-			this->CounterCheckBox->UseVisualStyleBackColor = true;
-			// 
-			// ZasvetCheckBox
-			// 
-			this->ZasvetCheckBox->AutoSize = true;
-			this->ZasvetCheckBox->Checked = true;
-			this->ZasvetCheckBox->CheckState = System::Windows::Forms::CheckState::Checked;
-			this->ZasvetCheckBox->Location = System::Drawing::Point(6, 22);
-			this->ZasvetCheckBox->Name = L"ZasvetCheckBox";
-			this->ZasvetCheckBox->Size = System::Drawing::Size(87, 20);
-			this->ZasvetCheckBox->TabIndex = 2;
-			this->ZasvetCheckBox->Text = L"Saturation";
-			this->ZasvetCheckBox->UseVisualStyleBackColor = true;
-			// 
-			// ARUCheckBox
-			// 
-			this->ARUCheckBox->AutoSize = true;
-			this->ARUCheckBox->Checked = true;
-			this->ARUCheckBox->CheckState = System::Windows::Forms::CheckState::Checked;
-			this->ARUCheckBox->Location = System::Drawing::Point(105, 3);
-			this->ARUCheckBox->Name = L"ARUCheckBox";
-			this->ARUCheckBox->Size = System::Drawing::Size(56, 20);
-			this->ARUCheckBox->TabIndex = 1;
-			this->ARUCheckBox->Text = L"AGR";
-			this->ARUCheckBox->UseVisualStyleBackColor = true;
-			// 
-			// ZahvatCheckBox
-			// 
-			this->ZahvatCheckBox->AutoSize = true;
-			this->ZahvatCheckBox->Checked = true;
-			this->ZahvatCheckBox->CheckState = System::Windows::Forms::CheckState::Checked;
-			this->ZahvatCheckBox->Location = System::Drawing::Point(6, 3);
-			this->ZahvatCheckBox->Name = L"ZahvatCheckBox";
-			this->ZahvatCheckBox->Size = System::Drawing::Size(74, 20);
-			this->ZahvatCheckBox->TabIndex = 0;
-			this->ZahvatCheckBox->Text = L"Capture";
-			this->ZahvatCheckBox->UseVisualStyleBackColor = true;
 			// 
 			// zedGraphControl1
 			// 
@@ -2828,8 +2231,789 @@ namespace CopterGUI {
 			this->zedGraphControl1->ScrollMinX = 0;
 			this->zedGraphControl1->ScrollMinY = 0;
 			this->zedGraphControl1->ScrollMinY2 = 0;
-			this->zedGraphControl1->Size = System::Drawing::Size(1011, 602);
+			this->zedGraphControl1->Size = System::Drawing::Size(1023, 602);
 			this->zedGraphControl1->TabIndex = 0;
+			// 
+			// softVerLbl
+			// 
+			this->softVerLbl->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
+			this->softVerLbl->AutoSize = true;
+			this->softVerLbl->Location = System::Drawing::Point(1162, 645);
+			this->softVerLbl->Name = L"softVerLbl";
+			this->softVerLbl->Size = System::Drawing::Size(16, 13);
+			this->softVerLbl->TabIndex = 204;
+			this->softVerLbl->Text = L"v.";
+			// 
+			// pvkNumberLbl
+			// 
+			this->pvkNumberLbl->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
+			this->pvkNumberLbl->AutoSize = true;
+			this->pvkNumberLbl->Location = System::Drawing::Point(1058, 645);
+			this->pvkNumberLbl->Name = L"pvkNumberLbl";
+			this->pvkNumberLbl->Size = System::Drawing::Size(43, 13);
+			this->pvkNumberLbl->TabIndex = 203;
+			this->pvkNumberLbl->Text = L"ПВК №";
+			// 
+			// panel7
+			// 
+			this->panel7->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
+			this->panel7->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
+			this->panel7->Location = System::Drawing::Point(1040, 534);
+			this->panel7->Name = L"panel7";
+			this->panel7->Size = System::Drawing::Size(175, 85);
+			this->panel7->TabIndex = 202;
+			// 
+			// RolEnAllCheckBox
+			// 
+			this->RolEnAllCheckBox->AutoSize = true;
+			this->RolEnAllCheckBox->Enabled = false;
+			this->RolEnAllCheckBox->Location = System::Drawing::Point(43, 0);
+			this->RolEnAllCheckBox->Name = L"RolEnAllCheckBox";
+			this->RolEnAllCheckBox->Size = System::Drawing::Size(72, 17);
+			this->RolEnAllCheckBox->TabIndex = 16;
+			this->RolEnAllCheckBox->Text = L"Enable all";
+			this->RolEnAllCheckBox->UseVisualStyleBackColor = true;
+			// 
+			// PitEnAllCheckBox
+			// 
+			this->PitEnAllCheckBox->AutoSize = true;
+			this->PitEnAllCheckBox->Enabled = false;
+			this->PitEnAllCheckBox->Location = System::Drawing::Point(43, 0);
+			this->PitEnAllCheckBox->Name = L"PitEnAllCheckBox";
+			this->PitEnAllCheckBox->Size = System::Drawing::Size(72, 17);
+			this->PitEnAllCheckBox->TabIndex = 10;
+			this->PitEnAllCheckBox->Text = L"Enable all";
+			this->PitEnAllCheckBox->UseVisualStyleBackColor = true;
+			// 
+			// panel6
+			// 
+			this->panel6->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
+			this->panel6->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
+			this->panel6->Controls->Add(this->label29);
+			this->panel6->Controls->Add(this->RcThrTextBox);
+			this->panel6->Controls->Add(this->RcThrCheckBox);
+			this->panel6->Controls->Add(this->MotorEnAllCheckBox);
+			this->panel6->Controls->Add(this->FRCheckBox);
+			this->panel6->Controls->Add(this->BRCheckBox);
+			this->panel6->Controls->Add(this->FLCheckBox);
+			this->panel6->Controls->Add(this->BLCheckBox);
+			this->panel6->Controls->Add(this->label17);
+			this->panel6->Controls->Add(this->BRTextBox);
+			this->panel6->Controls->Add(this->label15);
+			this->panel6->Controls->Add(this->BLTextBox);
+			this->panel6->Controls->Add(this->label13);
+			this->panel6->Controls->Add(this->FRTextBox);
+			this->panel6->Controls->Add(this->label11);
+			this->panel6->Controls->Add(this->FLTextBox);
+			this->panel6->Location = System::Drawing::Point(1036, 392);
+			this->panel6->Name = L"panel6";
+			this->panel6->Size = System::Drawing::Size(175, 100);
+			this->panel6->TabIndex = 164;
+			// 
+			// label29
+			// 
+			this->label29->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
+			this->label29->AutoSize = true;
+			this->label29->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
+			this->label29->Location = System::Drawing::Point(105, 13);
+			this->label29->Name = L"label29";
+			this->label29->Size = System::Drawing::Size(14, 16);
+			this->label29->TabIndex = 202;
+			this->label29->Text = L"x";
+			// 
+			// RcThrTextBox
+			// 
+			this->RcThrTextBox->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
+			this->RcThrTextBox->BorderStyle = System::Windows::Forms::BorderStyle::None;
+			this->RcThrTextBox->Enabled = false;
+			this->RcThrTextBox->Location = System::Drawing::Point(119, 15);
+			this->RcThrTextBox->Name = L"RcThrTextBox";
+			this->RcThrTextBox->Size = System::Drawing::Size(44, 13);
+			this->RcThrTextBox->TabIndex = 203;
+			this->RcThrTextBox->Text = L"1";
+			this->RcThrTextBox->UseWaitCursor = true;
+			// 
+			// RcThrCheckBox
+			// 
+			this->RcThrCheckBox->AutoSize = true;
+			this->RcThrCheckBox->Enabled = false;
+			this->RcThrCheckBox->Location = System::Drawing::Point(6, 15);
+			this->RcThrCheckBox->Name = L"RcThrCheckBox";
+			this->RcThrCheckBox->Size = System::Drawing::Size(76, 17);
+			this->RcThrCheckBox->TabIndex = 201;
+			this->RcThrCheckBox->Text = L"RC throttle";
+			this->RcThrCheckBox->UseVisualStyleBackColor = true;
+			// 
+			// MotorEnAllCheckBox
+			// 
+			this->MotorEnAllCheckBox->AutoSize = true;
+			this->MotorEnAllCheckBox->Enabled = false;
+			this->MotorEnAllCheckBox->Location = System::Drawing::Point(43, 0);
+			this->MotorEnAllCheckBox->Name = L"MotorEnAllCheckBox";
+			this->MotorEnAllCheckBox->Size = System::Drawing::Size(72, 17);
+			this->MotorEnAllCheckBox->TabIndex = 196;
+			this->MotorEnAllCheckBox->Text = L"Enable all";
+			this->MotorEnAllCheckBox->UseVisualStyleBackColor = true;
+			// 
+			// FRCheckBox
+			// 
+			this->FRCheckBox->AutoSize = true;
+			this->FRCheckBox->Enabled = false;
+			this->FRCheckBox->Location = System::Drawing::Point(6, 48);
+			this->FRCheckBox->Name = L"FRCheckBox";
+			this->FRCheckBox->Size = System::Drawing::Size(40, 17);
+			this->FRCheckBox->TabIndex = 200;
+			this->FRCheckBox->Text = L"FR";
+			this->FRCheckBox->UseVisualStyleBackColor = true;
+			// 
+			// BRCheckBox
+			// 
+			this->BRCheckBox->AutoSize = true;
+			this->BRCheckBox->Enabled = false;
+			this->BRCheckBox->Location = System::Drawing::Point(6, 81);
+			this->BRCheckBox->Name = L"BRCheckBox";
+			this->BRCheckBox->Size = System::Drawing::Size(41, 17);
+			this->BRCheckBox->TabIndex = 199;
+			this->BRCheckBox->Text = L"BR";
+			this->BRCheckBox->UseVisualStyleBackColor = true;
+			// 
+			// FLCheckBox
+			// 
+			this->FLCheckBox->AutoSize = true;
+			this->FLCheckBox->Enabled = false;
+			this->FLCheckBox->Location = System::Drawing::Point(6, 31);
+			this->FLCheckBox->Name = L"FLCheckBox";
+			this->FLCheckBox->Size = System::Drawing::Size(38, 17);
+			this->FLCheckBox->TabIndex = 198;
+			this->FLCheckBox->Text = L"FL";
+			this->FLCheckBox->UseVisualStyleBackColor = true;
+			// 
+			// BLCheckBox
+			// 
+			this->BLCheckBox->AutoSize = true;
+			this->BLCheckBox->Enabled = false;
+			this->BLCheckBox->Location = System::Drawing::Point(6, 65);
+			this->BLCheckBox->Name = L"BLCheckBox";
+			this->BLCheckBox->Size = System::Drawing::Size(39, 17);
+			this->BLCheckBox->TabIndex = 197;
+			this->BLCheckBox->Text = L"BL";
+			this->BLCheckBox->UseVisualStyleBackColor = true;
+			// 
+			// label17
+			// 
+			this->label17->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
+			this->label17->AutoSize = true;
+			this->label17->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
+			this->label17->Location = System::Drawing::Point(105, 64);
+			this->label17->Name = L"label17";
+			this->label17->Size = System::Drawing::Size(14, 16);
+			this->label17->TabIndex = 195;
+			this->label17->Text = L"x";
+			// 
+			// BRTextBox
+			// 
+			this->BRTextBox->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
+			this->BRTextBox->BorderStyle = System::Windows::Forms::BorderStyle::None;
+			this->BRTextBox->Enabled = false;
+			this->BRTextBox->Location = System::Drawing::Point(119, 82);
+			this->BRTextBox->Name = L"BRTextBox";
+			this->BRTextBox->Size = System::Drawing::Size(44, 13);
+			this->BRTextBox->TabIndex = 193;
+			this->BRTextBox->Text = L"1";
+			// 
+			// label15
+			// 
+			this->label15->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
+			this->label15->AutoSize = true;
+			this->label15->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
+			this->label15->Location = System::Drawing::Point(105, 47);
+			this->label15->Name = L"label15";
+			this->label15->Size = System::Drawing::Size(14, 16);
+			this->label15->TabIndex = 191;
+			this->label15->Text = L"x";
+			// 
+			// BLTextBox
+			// 
+			this->BLTextBox->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
+			this->BLTextBox->BorderStyle = System::Windows::Forms::BorderStyle::None;
+			this->BLTextBox->Enabled = false;
+			this->BLTextBox->Location = System::Drawing::Point(119, 66);
+			this->BLTextBox->Name = L"BLTextBox";
+			this->BLTextBox->Size = System::Drawing::Size(44, 13);
+			this->BLTextBox->TabIndex = 189;
+			this->BLTextBox->Text = L"1";
+			// 
+			// label13
+			// 
+			this->label13->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
+			this->label13->AutoSize = true;
+			this->label13->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
+			this->label13->Location = System::Drawing::Point(105, 80);
+			this->label13->Name = L"label13";
+			this->label13->Size = System::Drawing::Size(14, 16);
+			this->label13->TabIndex = 187;
+			this->label13->Text = L"x";
+			// 
+			// FRTextBox
+			// 
+			this->FRTextBox->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
+			this->FRTextBox->BorderStyle = System::Windows::Forms::BorderStyle::None;
+			this->FRTextBox->Enabled = false;
+			this->FRTextBox->Location = System::Drawing::Point(119, 50);
+			this->FRTextBox->Name = L"FRTextBox";
+			this->FRTextBox->Size = System::Drawing::Size(44, 13);
+			this->FRTextBox->TabIndex = 185;
+			this->FRTextBox->Text = L"1";
+			// 
+			// label11
+			// 
+			this->label11->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
+			this->label11->AutoSize = true;
+			this->label11->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
+			this->label11->Location = System::Drawing::Point(105, 30);
+			this->label11->Name = L"label11";
+			this->label11->Size = System::Drawing::Size(14, 16);
+			this->label11->TabIndex = 183;
+			this->label11->Text = L"x";
+			// 
+			// FLTextBox
+			// 
+			this->FLTextBox->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
+			this->FLTextBox->BorderStyle = System::Windows::Forms::BorderStyle::None;
+			this->FLTextBox->Enabled = false;
+			this->FLTextBox->Location = System::Drawing::Point(119, 33);
+			this->FLTextBox->Name = L"FLTextBox";
+			this->FLTextBox->Size = System::Drawing::Size(44, 13);
+			this->FLTextBox->TabIndex = 181;
+			this->FLTextBox->Text = L"1";
+			// 
+			// label19
+			// 
+			this->label19->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
+			this->label19->AutoSize = true;
+			this->label19->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
+			this->label19->Location = System::Drawing::Point(1139, 513);
+			this->label19->Name = L"label19";
+			this->label19->Size = System::Drawing::Size(35, 16);
+			this->label19->TabIndex = 199;
+			this->label19->Text = L"End:";
+			// 
+			// textBox17
+			// 
+			this->textBox17->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
+			this->textBox17->Location = System::Drawing::Point(1095, 508);
+			this->textBox17->Name = L"textBox17";
+			this->textBox17->Size = System::Drawing::Size(44, 20);
+			this->textBox17->TabIndex = 198;
+			// 
+			// textBox18
+			// 
+			this->textBox18->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
+			this->textBox18->Location = System::Drawing::Point(1174, 508);
+			this->textBox18->Name = L"textBox18";
+			this->textBox18->Size = System::Drawing::Size(44, 20);
+			this->textBox18->TabIndex = 197;
+			// 
+			// label20
+			// 
+			this->label20->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
+			this->label20->AutoSize = true;
+			this->label20->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
+			this->label20->Location = System::Drawing::Point(1044, 513);
+			this->label20->Name = L"label20";
+			this->label20->Size = System::Drawing::Size(51, 16);
+			this->label20->TabIndex = 196;
+			this->label20->Text = L"9: Start:";
+			// 
+			// YawOutTextBox
+			// 
+			this->YawOutTextBox->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
+			this->YawOutTextBox->BorderStyle = System::Windows::Forms::BorderStyle::None;
+			this->YawOutTextBox->Enabled = false;
+			this->YawOutTextBox->Location = System::Drawing::Point(119, 83);
+			this->YawOutTextBox->Name = L"YawOutTextBox";
+			this->YawOutTextBox->Size = System::Drawing::Size(44, 13);
+			this->YawOutTextBox->TabIndex = 194;
+			this->YawOutTextBox->Text = L"1";
+			// 
+			// label18
+			// 
+			this->label18->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
+			this->label18->AutoSize = true;
+			this->label18->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
+			this->label18->Location = System::Drawing::Point(105, 80);
+			this->label18->Name = L"label18";
+			this->label18->Size = System::Drawing::Size(14, 16);
+			this->label18->TabIndex = 192;
+			this->label18->Text = L"x";
+			// 
+			// StabYawTextBox
+			// 
+			this->StabYawTextBox->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
+			this->StabYawTextBox->BorderStyle = System::Windows::Forms::BorderStyle::None;
+			this->StabYawTextBox->Enabled = false;
+			this->StabYawTextBox->Location = System::Drawing::Point(119, 66);
+			this->StabYawTextBox->Name = L"StabYawTextBox";
+			this->StabYawTextBox->Size = System::Drawing::Size(44, 13);
+			this->StabYawTextBox->TabIndex = 190;
+			this->StabYawTextBox->Text = L"1";
+			// 
+			// label16
+			// 
+			this->label16->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
+			this->label16->AutoSize = true;
+			this->label16->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
+			this->label16->Location = System::Drawing::Point(105, 64);
+			this->label16->Name = L"label16";
+			this->label16->Size = System::Drawing::Size(14, 16);
+			this->label16->TabIndex = 188;
+			this->label16->Text = L"x";
+			// 
+			// GyroYawTextBox
+			// 
+			this->GyroYawTextBox->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
+			this->GyroYawTextBox->BorderStyle = System::Windows::Forms::BorderStyle::None;
+			this->GyroYawTextBox->Enabled = false;
+			this->GyroYawTextBox->Location = System::Drawing::Point(119, 34);
+			this->GyroYawTextBox->Name = L"GyroYawTextBox";
+			this->GyroYawTextBox->Size = System::Drawing::Size(44, 13);
+			this->GyroYawTextBox->TabIndex = 186;
+			this->GyroYawTextBox->Text = L"1";
+			// 
+			// label14
+			// 
+			this->label14->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
+			this->label14->AutoSize = true;
+			this->label14->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
+			this->label14->Location = System::Drawing::Point(105, 32);
+			this->label14->Name = L"label14";
+			this->label14->Size = System::Drawing::Size(14, 16);
+			this->label14->TabIndex = 184;
+			this->label14->Text = L"x";
+			// 
+			// RcYawTextBox
+			// 
+			this->RcYawTextBox->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
+			this->RcYawTextBox->BorderStyle = System::Windows::Forms::BorderStyle::None;
+			this->RcYawTextBox->Enabled = false;
+			this->RcYawTextBox->Location = System::Drawing::Point(119, 17);
+			this->RcYawTextBox->Name = L"RcYawTextBox";
+			this->RcYawTextBox->Size = System::Drawing::Size(44, 13);
+			this->RcYawTextBox->TabIndex = 182;
+			this->RcYawTextBox->Text = L"1";
+			// 
+			// label12
+			// 
+			this->label12->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
+			this->label12->AutoSize = true;
+			this->label12->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
+			this->label12->Location = System::Drawing::Point(105, 15);
+			this->label12->Name = L"label12";
+			this->label12->Size = System::Drawing::Size(14, 16);
+			this->label12->TabIndex = 180;
+			this->label12->Text = L"x";
+			// 
+			// label8
+			// 
+			this->label8->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
+			this->label8->AutoSize = true;
+			this->label8->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
+			this->label8->Location = System::Drawing::Point(105, 32);
+			this->label8->Name = L"label8";
+			this->label8->Size = System::Drawing::Size(14, 16);
+			this->label8->TabIndex = 172;
+			this->label8->Text = L"x";
+			// 
+			// GyroRollTextBox
+			// 
+			this->GyroRollTextBox->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
+			this->GyroRollTextBox->BorderStyle = System::Windows::Forms::BorderStyle::None;
+			this->GyroRollTextBox->Enabled = false;
+			this->GyroRollTextBox->Location = System::Drawing::Point(119, 34);
+			this->GyroRollTextBox->Name = L"GyroRollTextBox";
+			this->GyroRollTextBox->Size = System::Drawing::Size(44, 13);
+			this->GyroRollTextBox->TabIndex = 173;
+			this->GyroRollTextBox->Text = L"1";
+			// 
+			// RcRollTextBox
+			// 
+			this->RcRollTextBox->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
+			this->RcRollTextBox->BorderStyle = System::Windows::Forms::BorderStyle::None;
+			this->RcRollTextBox->Enabled = false;
+			this->RcRollTextBox->Location = System::Drawing::Point(119, 17);
+			this->RcRollTextBox->Name = L"RcRollTextBox";
+			this->RcRollTextBox->Size = System::Drawing::Size(44, 13);
+			this->RcRollTextBox->TabIndex = 174;
+			this->RcRollTextBox->Text = L"1";
+			// 
+			// label7
+			// 
+			this->label7->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
+			this->label7->AutoSize = true;
+			this->label7->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
+			this->label7->Location = System::Drawing::Point(105, 15);
+			this->label7->Name = L"label7";
+			this->label7->Size = System::Drawing::Size(14, 16);
+			this->label7->TabIndex = 175;
+			this->label7->Text = L"x";
+			// 
+			// label10
+			// 
+			this->label10->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
+			this->label10->AutoSize = true;
+			this->label10->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
+			this->label10->Location = System::Drawing::Point(105, 79);
+			this->label10->Name = L"label10";
+			this->label10->Size = System::Drawing::Size(14, 16);
+			this->label10->TabIndex = 176;
+			this->label10->Text = L"x";
+			// 
+			// RollOutTextBox
+			// 
+			this->RollOutTextBox->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
+			this->RollOutTextBox->BorderStyle = System::Windows::Forms::BorderStyle::None;
+			this->RollOutTextBox->Enabled = false;
+			this->RollOutTextBox->Location = System::Drawing::Point(119, 81);
+			this->RollOutTextBox->Name = L"RollOutTextBox";
+			this->RollOutTextBox->Size = System::Drawing::Size(44, 13);
+			this->RollOutTextBox->TabIndex = 177;
+			this->RollOutTextBox->Text = L"1";
+			// 
+			// StabRollTextBox
+			// 
+			this->StabRollTextBox->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
+			this->StabRollTextBox->BorderStyle = System::Windows::Forms::BorderStyle::None;
+			this->StabRollTextBox->Enabled = false;
+			this->StabRollTextBox->Location = System::Drawing::Point(119, 65);
+			this->StabRollTextBox->Name = L"StabRollTextBox";
+			this->StabRollTextBox->Size = System::Drawing::Size(44, 13);
+			this->StabRollTextBox->TabIndex = 178;
+			this->StabRollTextBox->Text = L"1";
+			// 
+			// label9
+			// 
+			this->label9->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
+			this->label9->AutoSize = true;
+			this->label9->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
+			this->label9->Location = System::Drawing::Point(105, 63);
+			this->label9->Name = L"label9";
+			this->label9->Size = System::Drawing::Size(14, 16);
+			this->label9->TabIndex = 179;
+			this->label9->Text = L"x";
+			// 
+			// label3
+			// 
+			this->label3->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
+			this->label3->AutoSize = true;
+			this->label3->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
+			this->label3->Location = System::Drawing::Point(105, 13);
+			this->label3->Name = L"label3";
+			this->label3->Size = System::Drawing::Size(14, 16);
+			this->label3->TabIndex = 164;
+			this->label3->Text = L"x";
+			// 
+			// RcPitTextBox
+			// 
+			this->RcPitTextBox->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
+			this->RcPitTextBox->BorderStyle = System::Windows::Forms::BorderStyle::None;
+			this->RcPitTextBox->Enabled = false;
+			this->RcPitTextBox->Location = System::Drawing::Point(119, 15);
+			this->RcPitTextBox->Name = L"RcPitTextBox";
+			this->RcPitTextBox->Size = System::Drawing::Size(44, 13);
+			this->RcPitTextBox->TabIndex = 165;
+			this->RcPitTextBox->Text = L"1";
+			this->RcPitTextBox->UseWaitCursor = true;
+			// 
+			// GyroPitTextBox
+			// 
+			this->GyroPitTextBox->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
+			this->GyroPitTextBox->BorderStyle = System::Windows::Forms::BorderStyle::None;
+			this->GyroPitTextBox->Enabled = false;
+			this->GyroPitTextBox->Location = System::Drawing::Point(119, 32);
+			this->GyroPitTextBox->Name = L"GyroPitTextBox";
+			this->GyroPitTextBox->Size = System::Drawing::Size(44, 13);
+			this->GyroPitTextBox->TabIndex = 166;
+			this->GyroPitTextBox->Text = L"1";
+			// 
+			// label5
+			// 
+			this->label5->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
+			this->label5->AutoSize = true;
+			this->label5->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
+			this->label5->Location = System::Drawing::Point(105, 30);
+			this->label5->Name = L"label5";
+			this->label5->Size = System::Drawing::Size(14, 16);
+			this->label5->TabIndex = 167;
+			this->label5->Text = L"x";
+			// 
+			// label6
+			// 
+			this->label6->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
+			this->label6->AutoSize = true;
+			this->label6->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
+			this->label6->Location = System::Drawing::Point(105, 62);
+			this->label6->Name = L"label6";
+			this->label6->Size = System::Drawing::Size(14, 16);
+			this->label6->TabIndex = 168;
+			this->label6->Text = L"x";
+			// 
+			// PitOutTextBox
+			// 
+			this->PitOutTextBox->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
+			this->PitOutTextBox->BorderStyle = System::Windows::Forms::BorderStyle::None;
+			this->PitOutTextBox->Enabled = false;
+			this->PitOutTextBox->Location = System::Drawing::Point(119, 81);
+			this->PitOutTextBox->Name = L"PitOutTextBox";
+			this->PitOutTextBox->Size = System::Drawing::Size(44, 13);
+			this->PitOutTextBox->TabIndex = 169;
+			this->PitOutTextBox->Text = L"1";
+			// 
+			// StabPitTextBox
+			// 
+			this->StabPitTextBox->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
+			this->StabPitTextBox->BorderStyle = System::Windows::Forms::BorderStyle::None;
+			this->StabPitTextBox->Enabled = false;
+			this->StabPitTextBox->Location = System::Drawing::Point(119, 64);
+			this->StabPitTextBox->Name = L"StabPitTextBox";
+			this->StabPitTextBox->Size = System::Drawing::Size(44, 13);
+			this->StabPitTextBox->TabIndex = 170;
+			this->StabPitTextBox->Text = L"1";
+			// 
+			// label4
+			// 
+			this->label4->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
+			this->label4->AutoSize = true;
+			this->label4->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
+			this->label4->Location = System::Drawing::Point(105, 79);
+			this->label4->Name = L"label4";
+			this->label4->Size = System::Drawing::Size(14, 16);
+			this->label4->TabIndex = 171;
+			this->label4->Text = L"x";
+			// 
+			// panel5
+			// 
+			this->panel5->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
+			this->panel5->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
+			this->panel5->Controls->Add(this->IntRollCheckBox);
+			this->panel5->Controls->Add(this->IntRollTextBox);
+			this->panel5->Controls->Add(this->label31);
+			this->panel5->Controls->Add(this->RolEnAllCheckBox);
+			this->panel5->Controls->Add(this->GyroRollCheckBox);
+			this->panel5->Controls->Add(this->RollOutCheckBox);
+			this->panel5->Controls->Add(this->RcRollCheckBox);
+			this->panel5->Controls->Add(this->StabRollCheckBox);
+			this->panel5->Controls->Add(this->RcRollTextBox);
+			this->panel5->Controls->Add(this->GyroRollTextBox);
+			this->panel5->Controls->Add(this->StabRollTextBox);
+			this->panel5->Controls->Add(this->RollOutTextBox);
+			this->panel5->Controls->Add(this->label7);
+			this->panel5->Controls->Add(this->label8);
+			this->panel5->Controls->Add(this->label9);
+			this->panel5->Controls->Add(this->label10);
+			this->panel5->Location = System::Drawing::Point(1036, 180);
+			this->panel5->Name = L"panel5";
+			this->panel5->Size = System::Drawing::Size(175, 100);
+			this->panel5->TabIndex = 95;
+			// 
+			// IntRollCheckBox
+			// 
+			this->IntRollCheckBox->AutoSize = true;
+			this->IntRollCheckBox->Enabled = false;
+			this->IntRollCheckBox->Location = System::Drawing::Point(6, 49);
+			this->IntRollCheckBox->Name = L"IntRollCheckBox";
+			this->IntRollCheckBox->Size = System::Drawing::Size(54, 17);
+			this->IntRollCheckBox->TabIndex = 180;
+			this->IntRollCheckBox->Text = L"Int roll";
+			this->IntRollCheckBox->UseVisualStyleBackColor = true;
+			// 
+			// IntRollTextBox
+			// 
+			this->IntRollTextBox->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
+			this->IntRollTextBox->BorderStyle = System::Windows::Forms::BorderStyle::None;
+			this->IntRollTextBox->Enabled = false;
+			this->IntRollTextBox->Location = System::Drawing::Point(119, 49);
+			this->IntRollTextBox->Name = L"IntRollTextBox";
+			this->IntRollTextBox->Size = System::Drawing::Size(44, 13);
+			this->IntRollTextBox->TabIndex = 182;
+			this->IntRollTextBox->Text = L"1";
+			// 
+			// label31
+			// 
+			this->label31->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
+			this->label31->AutoSize = true;
+			this->label31->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
+			this->label31->Location = System::Drawing::Point(105, 47);
+			this->label31->Name = L"label31";
+			this->label31->Size = System::Drawing::Size(14, 16);
+			this->label31->TabIndex = 181;
+			this->label31->Text = L"x";
+			// 
+			// GyroRollCheckBox
+			// 
+			this->GyroRollCheckBox->AutoSize = true;
+			this->GyroRollCheckBox->Enabled = false;
+			this->GyroRollCheckBox->Location = System::Drawing::Point(6, 34);
+			this->GyroRollCheckBox->Name = L"GyroRollCheckBox";
+			this->GyroRollCheckBox->Size = System::Drawing::Size(64, 17);
+			this->GyroRollCheckBox->TabIndex = 24;
+			this->GyroRollCheckBox->Text = L"Gyro roll";
+			this->GyroRollCheckBox->UseVisualStyleBackColor = true;
+			// 
+			// RollOutCheckBox
+			// 
+			this->RollOutCheckBox->AutoSize = true;
+			this->RollOutCheckBox->Enabled = false;
+			this->RollOutCheckBox->Location = System::Drawing::Point(6, 81);
+			this->RollOutCheckBox->Name = L"RollOutCheckBox";
+			this->RollOutCheckBox->Size = System::Drawing::Size(62, 17);
+			this->RollOutCheckBox->TabIndex = 23;
+			this->RollOutCheckBox->Text = L"Roll out";
+			this->RollOutCheckBox->UseVisualStyleBackColor = true;
+			// 
+			// RcRollCheckBox
+			// 
+			this->RcRollCheckBox->AutoSize = true;
+			this->RcRollCheckBox->Enabled = false;
+			this->RcRollCheckBox->Location = System::Drawing::Point(6, 17);
+			this->RcRollCheckBox->Name = L"RcRollCheckBox";
+			this->RcRollCheckBox->Size = System::Drawing::Size(57, 17);
+			this->RcRollCheckBox->TabIndex = 22;
+			this->RcRollCheckBox->Text = L"RC roll";
+			this->RcRollCheckBox->UseVisualStyleBackColor = true;
+			// 
+			// StabRollCheckBox
+			// 
+			this->StabRollCheckBox->AutoSize = true;
+			this->StabRollCheckBox->Enabled = false;
+			this->StabRollCheckBox->Location = System::Drawing::Point(6, 65);
+			this->StabRollCheckBox->Name = L"StabRollCheckBox";
+			this->StabRollCheckBox->Size = System::Drawing::Size(64, 17);
+			this->StabRollCheckBox->TabIndex = 21;
+			this->StabRollCheckBox->Text = L"Stab roll";
+			this->StabRollCheckBox->UseVisualStyleBackColor = true;
+			// 
+			// panel2
+			// 
+			this->panel2->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
+			this->panel2->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
+			this->panel2->Controls->Add(this->label32);
+			this->panel2->Controls->Add(this->IntPitTextBox);
+			this->panel2->Controls->Add(this->IntPitCheckBox);
+			this->panel2->Controls->Add(this->PitEnAllCheckBox);
+			this->panel2->Controls->Add(this->label5);
+			this->panel2->Controls->Add(this->label3);
+			this->panel2->Controls->Add(this->PitOutCheckBox);
+			this->panel2->Controls->Add(this->GyroPitTextBox);
+			this->panel2->Controls->Add(this->RcPitTextBox);
+			this->panel2->Controls->Add(this->GyroPitCheckBox);
+			this->panel2->Controls->Add(this->StabPitCheckBox);
+			this->panel2->Controls->Add(this->label6);
+			this->panel2->Controls->Add(this->RcPitCheckBox);
+			this->panel2->Controls->Add(this->StabPitTextBox);
+			this->panel2->Controls->Add(this->label4);
+			this->panel2->Controls->Add(this->PitOutTextBox);
+			this->panel2->Location = System::Drawing::Point(1036, 74);
+			this->panel2->Name = L"panel2";
+			this->panel2->Size = System::Drawing::Size(175, 100);
+			this->panel2->TabIndex = 92;
+			// 
+			// label32
+			// 
+			this->label32->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
+			this->label32->AutoSize = true;
+			this->label32->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
+			this->label32->Location = System::Drawing::Point(105, 46);
+			this->label32->Name = L"label32";
+			this->label32->Size = System::Drawing::Size(14, 16);
+			this->label32->TabIndex = 174;
+			this->label32->Text = L"x";
+			// 
+			// IntPitTextBox
+			// 
+			this->IntPitTextBox->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
+			this->IntPitTextBox->BorderStyle = System::Windows::Forms::BorderStyle::None;
+			this->IntPitTextBox->Enabled = false;
+			this->IntPitTextBox->Location = System::Drawing::Point(119, 48);
+			this->IntPitTextBox->Name = L"IntPitTextBox";
+			this->IntPitTextBox->Size = System::Drawing::Size(44, 13);
+			this->IntPitTextBox->TabIndex = 173;
+			this->IntPitTextBox->Text = L"1";
+			// 
+			// IntPitCheckBox
+			// 
+			this->IntPitCheckBox->AutoSize = true;
+			this->IntPitCheckBox->Enabled = false;
+			this->IntPitCheckBox->Location = System::Drawing::Point(6, 48);
+			this->IntPitCheckBox->Name = L"IntPitCheckBox";
+			this->IntPitCheckBox->Size = System::Drawing::Size(64, 17);
+			this->IntPitCheckBox->TabIndex = 172;
+			this->IntPitCheckBox->Text = L"Int pitch";
+			this->IntPitCheckBox->UseVisualStyleBackColor = true;
+			// 
+			// PitOutCheckBox
+			// 
+			this->PitOutCheckBox->AutoSize = true;
+			this->PitOutCheckBox->Enabled = false;
+			this->PitOutCheckBox->Location = System::Drawing::Point(6, 81);
+			this->PitOutCheckBox->Name = L"PitOutCheckBox";
+			this->PitOutCheckBox->Size = System::Drawing::Size(68, 17);
+			this->PitOutCheckBox->TabIndex = 4;
+			this->PitOutCheckBox->Text = L"Pitch out";
+			this->PitOutCheckBox->UseVisualStyleBackColor = true;
+			// 
+			// GyroPitCheckBox
+			// 
+			this->GyroPitCheckBox->AutoSize = true;
+			this->GyroPitCheckBox->Enabled = false;
+			this->GyroPitCheckBox->Location = System::Drawing::Point(6, 32);
+			this->GyroPitCheckBox->Name = L"GyroPitCheckBox";
+			this->GyroPitCheckBox->Size = System::Drawing::Size(74, 17);
+			this->GyroPitCheckBox->TabIndex = 2;
+			this->GyroPitCheckBox->Text = L"Gyro pitch";
+			this->GyroPitCheckBox->UseVisualStyleBackColor = true;
+			// 
+			// StabPitCheckBox
+			// 
+			this->StabPitCheckBox->AutoSize = true;
+			this->StabPitCheckBox->Enabled = false;
+			this->StabPitCheckBox->Location = System::Drawing::Point(6, 64);
+			this->StabPitCheckBox->Name = L"StabPitCheckBox";
+			this->StabPitCheckBox->Size = System::Drawing::Size(74, 17);
+			this->StabPitCheckBox->TabIndex = 1;
+			this->StabPitCheckBox->Text = L"Stab pitch";
+			this->StabPitCheckBox->UseVisualStyleBackColor = true;
+			// 
+			// RcPitCheckBox
+			// 
+			this->RcPitCheckBox->AutoSize = true;
+			this->RcPitCheckBox->Enabled = false;
+			this->RcPitCheckBox->Location = System::Drawing::Point(6, 15);
+			this->RcPitCheckBox->Name = L"RcPitCheckBox";
+			this->RcPitCheckBox->Size = System::Drawing::Size(67, 17);
+			this->RcPitCheckBox->TabIndex = 0;
+			this->RcPitCheckBox->Text = L"RC pitch";
+			this->RcPitCheckBox->UseVisualStyleBackColor = true;
 			// 
 			// checkBox1
 			// 
@@ -2952,13 +3136,138 @@ namespace CopterGUI {
 			// 
 			this->toolTip1->AutomaticDelay = 300;
 			// 
+			// panel3
+			// 
+			this->panel3->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
+			this->panel3->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
+			this->panel3->Controls->Add(this->IntYawCheckBox);
+			this->panel3->Controls->Add(this->IntYawTextBox);
+			this->panel3->Controls->Add(this->label30);
+			this->panel3->Controls->Add(this->YawEnAllCheckBox);
+			this->panel3->Controls->Add(this->GyroYawCheckBox);
+			this->panel3->Controls->Add(this->YawOutCheckBox);
+			this->panel3->Controls->Add(this->RcYawCheckBox);
+			this->panel3->Controls->Add(this->StabYawCheckBox);
+			this->panel3->Controls->Add(this->YawOutTextBox);
+			this->panel3->Controls->Add(this->label12);
+			this->panel3->Controls->Add(this->label14);
+			this->panel3->Controls->Add(this->label18);
+			this->panel3->Controls->Add(this->StabYawTextBox);
+			this->panel3->Controls->Add(this->label16);
+			this->panel3->Controls->Add(this->RcYawTextBox);
+			this->panel3->Controls->Add(this->GyroYawTextBox);
+			this->panel3->Location = System::Drawing::Point(1036, 286);
+			this->panel3->Name = L"panel3";
+			this->panel3->Size = System::Drawing::Size(175, 100);
+			this->panel3->TabIndex = 96;
+			// 
+			// IntYawCheckBox
+			// 
+			this->IntYawCheckBox->AutoSize = true;
+			this->IntYawCheckBox->Enabled = false;
+			this->IntYawCheckBox->Location = System::Drawing::Point(6, 50);
+			this->IntYawCheckBox->Name = L"IntYawCheckBox";
+			this->IntYawCheckBox->Size = System::Drawing::Size(60, 17);
+			this->IntYawCheckBox->TabIndex = 195;
+			this->IntYawCheckBox->Text = L"Int yaw";
+			this->IntYawCheckBox->UseVisualStyleBackColor = true;
+			// 
+			// IntYawTextBox
+			// 
+			this->IntYawTextBox->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
+			this->IntYawTextBox->BorderStyle = System::Windows::Forms::BorderStyle::None;
+			this->IntYawTextBox->Enabled = false;
+			this->IntYawTextBox->Location = System::Drawing::Point(119, 50);
+			this->IntYawTextBox->Name = L"IntYawTextBox";
+			this->IntYawTextBox->Size = System::Drawing::Size(44, 13);
+			this->IntYawTextBox->TabIndex = 197;
+			this->IntYawTextBox->Text = L"1";
+			// 
+			// label30
+			// 
+			this->label30->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Right));
+			this->label30->AutoSize = true;
+			this->label30->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
+			this->label30->Location = System::Drawing::Point(105, 48);
+			this->label30->Name = L"label30";
+			this->label30->Size = System::Drawing::Size(14, 16);
+			this->label30->TabIndex = 196;
+			this->label30->Text = L"x";
+			// 
+			// YawEnAllCheckBox
+			// 
+			this->YawEnAllCheckBox->AutoSize = true;
+			this->YawEnAllCheckBox->Enabled = false;
+			this->YawEnAllCheckBox->Location = System::Drawing::Point(43, 0);
+			this->YawEnAllCheckBox->Name = L"YawEnAllCheckBox";
+			this->YawEnAllCheckBox->Size = System::Drawing::Size(72, 17);
+			this->YawEnAllCheckBox->TabIndex = 16;
+			this->YawEnAllCheckBox->Text = L"Enable all";
+			this->YawEnAllCheckBox->UseVisualStyleBackColor = true;
+			// 
+			// GyroYawCheckBox
+			// 
+			this->GyroYawCheckBox->AutoSize = true;
+			this->GyroYawCheckBox->Enabled = false;
+			this->GyroYawCheckBox->Location = System::Drawing::Point(6, 34);
+			this->GyroYawCheckBox->Name = L"GyroYawCheckBox";
+			this->GyroYawCheckBox->Size = System::Drawing::Size(70, 17);
+			this->GyroYawCheckBox->TabIndex = 24;
+			this->GyroYawCheckBox->Text = L"Gyro yaw";
+			this->GyroYawCheckBox->UseVisualStyleBackColor = true;
+			// 
+			// YawOutCheckBox
+			// 
+			this->YawOutCheckBox->AutoSize = true;
+			this->YawOutCheckBox->Enabled = false;
+			this->YawOutCheckBox->Location = System::Drawing::Point(6, 82);
+			this->YawOutCheckBox->Name = L"YawOutCheckBox";
+			this->YawOutCheckBox->Size = System::Drawing::Size(65, 17);
+			this->YawOutCheckBox->TabIndex = 23;
+			this->YawOutCheckBox->Text = L"Yaw out";
+			this->YawOutCheckBox->UseVisualStyleBackColor = true;
+			// 
+			// RcYawCheckBox
+			// 
+			this->RcYawCheckBox->AutoSize = true;
+			this->RcYawCheckBox->Enabled = false;
+			this->RcYawCheckBox->Location = System::Drawing::Point(6, 17);
+			this->RcYawCheckBox->Name = L"RcYawCheckBox";
+			this->RcYawCheckBox->Size = System::Drawing::Size(63, 17);
+			this->RcYawCheckBox->TabIndex = 22;
+			this->RcYawCheckBox->Text = L"RC yaw";
+			this->RcYawCheckBox->UseVisualStyleBackColor = true;
+			// 
+			// StabYawCheckBox
+			// 
+			this->StabYawCheckBox->AutoSize = true;
+			this->StabYawCheckBox->Enabled = false;
+			this->StabYawCheckBox->Location = System::Drawing::Point(6, 66);
+			this->StabYawCheckBox->Name = L"StabYawCheckBox";
+			this->StabYawCheckBox->Size = System::Drawing::Size(70, 17);
+			this->StabYawCheckBox->TabIndex = 21;
+			this->StabYawCheckBox->Text = L"Stab yaw";
+			this->StabYawCheckBox->UseVisualStyleBackColor = true;
+			// 
 			// GuiForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(1211, 684);
+			this->Controls->Add(this->panel3);
+			this->Controls->Add(this->label19);
+			this->Controls->Add(this->softVerLbl);
+			this->Controls->Add(this->textBox17);
+			this->Controls->Add(this->textBox18);
 			this->Controls->Add(this->panel1);
+			this->Controls->Add(this->label20);
+			this->Controls->Add(this->pvkNumberLbl);
 			this->Controls->Add(this->tabControl1);
+			this->Controls->Add(this->panel7);
+			this->Controls->Add(this->panel6);
+			this->Controls->Add(this->panel2);
+			this->Controls->Add(this->panel5);
 			this->KeyPreview = true;
 			this->Name = L"GuiForm";
 			this->Text = L"GuiForm";
@@ -2971,20 +3280,17 @@ namespace CopterGUI {
 			this->tabControl1->ResumeLayout(false);
 			this->tabPage1->ResumeLayout(false);
 			this->tabPage1->PerformLayout();
-			this->panel7->ResumeLayout(false);
-			this->panel7->PerformLayout();
 			this->panel6->ResumeLayout(false);
 			this->panel6->PerformLayout();
 			this->panel5->ResumeLayout(false);
 			this->panel5->PerformLayout();
-			this->panel4->ResumeLayout(false);
-			this->panel4->PerformLayout();
-			this->panel3->ResumeLayout(false);
-			this->panel3->PerformLayout();
 			this->panel2->ResumeLayout(false);
 			this->panel2->PerformLayout();
 			this->panel1->ResumeLayout(false);
+			this->panel3->ResumeLayout(false);
+			this->panel3->PerformLayout();
 			this->ResumeLayout(false);
+			this->PerformLayout();
 
 		}
 
@@ -3231,7 +3537,7 @@ namespace CopterGUI {
 
 				if (calibrationInProgressFlag)
 				{
-					if (boxesAreDrawedFlag)
+				/*	if (boxesAreDrawedFlag)
 					{
 						i = 0;
 						if (textBox1->Text == "")
@@ -3551,7 +3857,7 @@ namespace CopterGUI {
 						default: break;
 						}
 					}
-					ReDrawBoxes(zedGraphControl1);
+					ReDrawBoxes(zedGraphControl1);*/
 				}
 			}
 		}

@@ -1,32 +1,32 @@
 ﻿  GuiForm.cpp
-d:\projects\copter\trunk\copter gui\coptergui\guiform.h(376): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-d:\projects\copter\trunk\copter gui\coptergui\guiform.h(377): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+d:\projects\copter\trunk\copter gui\coptergui\guiform.h(378): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
 d:\projects\copter\trunk\copter gui\coptergui\guiform.h(379): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-d:\projects\copter\trunk\copter gui\coptergui\guiform.h(380): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-d:\projects\copter\trunk\copter gui\coptergui\guiform.h(384): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-d:\projects\copter\trunk\copter gui\coptergui\guiform.h(436): warning C4101: 'myCurve2': unreferenced local variable
-d:\projects\copter\trunk\copter gui\coptergui\guiform.h(593): warning C4101: 'myCurve2': unreferenced local variable
-d:\projects\copter\trunk\copter gui\coptergui\guiform.h(746): warning C4101: 'end_pos': unreferenced local variable
-d:\projects\copter\trunk\copter gui\coptergui\guiform.h(746): warning C4101: 'time2_pos': unreferenced local variable
-d:\projects\copter\trunk\copter gui\coptergui\guiform.h(746): warning C4101: 'counter_pos': unreferenced local variable
-d:\projects\copter\trunk\copter gui\coptergui\guiform.h(746): warning C4101: 'canMsg2_pos': unreferenced local variable
-d:\projects\copter\trunk\copter gui\coptergui\guiform.h(746): warning C4101: 'cycCount_pos': unreferenced local variable
-d:\projects\copter\trunk\copter gui\coptergui\guiform.h(1098): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-d:\projects\copter\trunk\copter gui\coptergui\guiform.h(1109): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-d:\projects\copter\trunk\copter gui\coptergui\guiform.h(1120): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-d:\projects\copter\trunk\copter gui\coptergui\guiform.h(1131): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-d:\projects\copter\trunk\copter gui\coptergui\guiform.h(1156): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-d:\projects\copter\trunk\copter gui\coptergui\guiform.h(1170): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-d:\projects\copter\trunk\copter gui\coptergui\guiform.h(1179): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-d:\projects\copter\trunk\copter gui\coptergui\guiform.h(1172): warning C4101: 'e': unreferenced local variable
-d:\projects\copter\trunk\copter gui\coptergui\guiform.h(1203): warning C4101: 'b': unreferenced local variable
-d:\projects\copter\trunk\copter gui\coptergui\guiform.h(1203): warning C4101: 'c': unreferenced local variable
-d:\projects\copter\trunk\copter gui\coptergui\guiform.h(1203): warning C4101: 'd': unreferenced local variable
-d:\projects\copter\trunk\copter gui\coptergui\guiform.h(1346): warning C4101: 'graphY': unreferenced local variable
-d:\projects\copter\trunk\copter gui\coptergui\guiform.h(1346): warning C4101: 'graphX': unreferenced local variable
-d:\projects\copter\trunk\copter gui\coptergui\guiform.h(1480): warning C4101: 'myStream': unreferenced local variable
-d:\projects\copter\trunk\copter gui\coptergui\guiform.h(3092): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-d:\projects\copter\trunk\copter gui\coptergui\guiform.h(3123): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-d:\projects\copter\trunk\copter gui\coptergui\guiform.h(3153): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+d:\projects\copter\trunk\copter gui\coptergui\guiform.h(381): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+d:\projects\copter\trunk\copter gui\coptergui\guiform.h(382): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+d:\projects\copter\trunk\copter gui\coptergui\guiform.h(386): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+d:\projects\copter\trunk\copter gui\coptergui\guiform.h(438): warning C4101: 'myCurve2': unreferenced local variable
+d:\projects\copter\trunk\copter gui\coptergui\guiform.h(595): warning C4101: 'myCurve2': unreferenced local variable
+d:\projects\copter\trunk\copter gui\coptergui\guiform.h(748): warning C4101: 'end_pos': unreferenced local variable
+d:\projects\copter\trunk\copter gui\coptergui\guiform.h(748): warning C4101: 'time2_pos': unreferenced local variable
+d:\projects\copter\trunk\copter gui\coptergui\guiform.h(748): warning C4101: 'counter_pos': unreferenced local variable
+d:\projects\copter\trunk\copter gui\coptergui\guiform.h(748): warning C4101: 'canMsg2_pos': unreferenced local variable
+d:\projects\copter\trunk\copter gui\coptergui\guiform.h(748): warning C4101: 'cycCount_pos': unreferenced local variable
+d:\projects\copter\trunk\copter gui\coptergui\guiform.h(1100): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\projects\copter\trunk\copter gui\coptergui\guiform.h(1111): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\projects\copter\trunk\copter gui\coptergui\guiform.h(1122): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\projects\copter\trunk\copter gui\coptergui\guiform.h(1133): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\projects\copter\trunk\copter gui\coptergui\guiform.h(1158): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\projects\copter\trunk\copter gui\coptergui\guiform.h(1172): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\projects\copter\trunk\copter gui\coptergui\guiform.h(1181): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\projects\copter\trunk\copter gui\coptergui\guiform.h(1174): warning C4101: 'e': unreferenced local variable
+d:\projects\copter\trunk\copter gui\coptergui\guiform.h(1205): warning C4101: 'b': unreferenced local variable
+d:\projects\copter\trunk\copter gui\coptergui\guiform.h(1205): warning C4101: 'c': unreferenced local variable
+d:\projects\copter\trunk\copter gui\coptergui\guiform.h(1205): warning C4101: 'd': unreferenced local variable
+d:\projects\copter\trunk\copter gui\coptergui\guiform.h(1348): warning C4101: 'graphY': unreferenced local variable
+d:\projects\copter\trunk\copter gui\coptergui\guiform.h(1348): warning C4101: 'graphX': unreferenced local variable
+d:\projects\copter\trunk\copter gui\coptergui\guiform.h(1572): warning C4101: 'myStream': unreferenced local variable
+d:\projects\copter\trunk\copter gui\coptergui\guiform.h(3398): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+d:\projects\copter\trunk\copter gui\coptergui\guiform.h(3429): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+d:\projects\copter\trunk\copter gui\coptergui\guiform.h(3459): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
   GuiForm.obj : MSIL module encountered; incremental linking is disabled for MSIL; performing full link
   CopterGUI.vcxproj -> D:\Projects\Copter\trunk\Copter GUI\Debug\CopterGUI.exe

@@ -23,8 +23,6 @@ Assembly System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f
 Class CopterGUI.GuiForm: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
   :System.Windows.Forms.Form
     Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
-  Fields:
-    UcanDotNET.USBcanServer CANsrv : Public, Static
   Methods:
     Load_Graw(Double, GraphPane, ZedGraphControl): PrivateScope, Public, HideBySig
     FileRead(SByte*, Int32): PrivateScope, Public, HideBySig
@@ -34,6 +32,7 @@ Class CopterGUI.GuiForm: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
     Calibrate(): PrivateScope, Public, HideBySig
     ReDrawBoxes(ZedGraphControl): PrivateScope, Public, HideBySig
     ScaleGraphs(ZedGraphControl): PrivateScope, Public, HideBySig
+    ParseHeader(basic_string<char\,std::char_traits<char>\,std::allocator<char> >*): PrivateScope, Public, HideBySig
     startBtnClickHandler(): PrivateScope, Public, HideBySig
     stopBtnClickHandler(): PrivateScope, Public, HideBySig
     saveBtnClickHandler(): PrivateScope, Public, HideBySig

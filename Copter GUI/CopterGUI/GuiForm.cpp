@@ -15,7 +15,6 @@ using namespace System::Drawing;
 using namespace ZedGraph;
 using namespace System::Runtime::InteropServices;
 using namespace CopterGUI;
-using namespace UcanDotNET;
 
 [STAThreadAttribute]
 void Main() {
