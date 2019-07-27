@@ -33,7 +33,7 @@ MPU6050 mpu;
 
 #define ENABLE_LOGGING                  TRUE
 #define DISABLE_MOTORS                  TRUE
-#define EXECUTION_TIME_MEASURMENTS      TRUE
+#define EXECUTION_TIME_MEASURMENTS      FALSE
 #define NUMBER_OF_CYCLES                100
 
 // ******************
@@ -184,6 +184,7 @@ void setup()
 #if ENABLE_LOGGING == TRUE
 void loop (ostream& logFile) {
     string logData;
+    static long logCnt = 0;
 #else
 void loop () {
 #endif
@@ -353,15 +354,47 @@ gyroYaw=gyro[0];   gyroPitch=gyro[1]; gyroRoll=-gyro[2];
   }*/
   
 #if ENABLE_LOGGING == TRUE
-  logData  = to_string(rcthr);
+  logData  = to_string(logCnt);
+  logData += "\t";
+  logData += to_string(rcthr);
   logData += "\t";
   logData += to_string(rcpit);  
   logData += "\t";
+  logData += to_string(gyroPitch);
+  logData += "\t";
+  logData += to_string(ypr[1]);
+  logData += "\t";
+  logData += to_string(pitch_stab_output);
+  logData += "\t";
+  logData += to_string(pitch_output);  
+  logData += "\t";
   logData += to_string(rcroll);  
+  logData += "\t";
+  logData += to_string(gyroRoll);
+  logData += "\t";
+  logData += to_string(ypr[2]); 
+  logData += "\t";
+  logData += to_string(roll_stab_output);  
+  logData += "\t";
+  logData += to_string(roll_output); 
   logData += "\t";
   logData += to_string(rcyaw);  
   logData += "\t";
-  logData += to_string(gyroPitch);
+  logData += to_string(gyroYaw);  
+  logData += "\t";
+  logData += to_string(ypr[0]);  
+  logData += "\t";
+  logData += to_string(yaw_stab_output);  
+  logData += "\t";
+  logData += to_string(yaw_output);  
+  logData += "\t";
+  logData += to_string(motor[MOTOR_FR]);
+  logData += "\t";
+  logData += to_string(motor[MOTOR_FL]);
+  logData += "\t";
+  logData += to_string(motor[MOTOR_BR]);
+  logData += "\t";
+  logData += to_string(motor[MOTOR_BL]);
   logData += "\n"; 
   
   logFile << logData;
@@ -393,16 +426,23 @@ int main(void)
     time_t rawtime;
     struct tm * timeinfo;
     char buffer[80];
+    int titleLenght = 0;
 
     time (&rawtime);
     timeinfo = localtime(&rawtime);
 
-    strftime(buffer,sizeof(buffer),"%d-%m-%Y %H:%M:%S",timeinfo);
+    strftime(buffer,sizeof(buffer),"%d.%m.%Y %H-%M-%S",timeinfo);
+    titleLenght = strlen(buffer);
+    buffer[titleLenght] = '.';
+    buffer[titleLenght + 1] = 't';
+    buffer[titleLenght + 2] = 'x';
+    buffer[titleLenght + 3] = 't';
+    buffer[titleLenght + 4] = '\0';
     string title = buffer;
 	string outString = "";
 	ofstream fout(location + title);
 	
-	outString = "t\tCapture\tAGR\tSaturation\tPeleng, grad\tPhase, grad\tU1, мВ\tU2, мВ\tU3, мВ\tU4, mV\tCounter\t\t";
+	outString = "t\trcthr\trcpit\tgyropit\tintpit\tstabpit\tpitout\trcroll\tgyroroll\tintroll\tstabroll\trollout\trcyaw\tgyroyaw\tintyaw\tstabyaw\tyawout\tFR\tFL\tBR\tBL\n";
     fout << outString;
 #endif
 
