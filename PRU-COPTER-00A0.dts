@@ -23,6 +23,9 @@
  // You'll have to reboot, after which you can do this as root to activate it:  
  // echo PRU-COPTER > /sys/devices/bone_capemgr.?/slots  
  
+ // Check with
+ // cat /sys/devices/bone_capemgr.9/slots
+ 
  /dts-v1/;  
  /plugin/;  
  
@@ -46,7 +49,7 @@
    // Beware: Many other PRU EGP pins are reserved by HDMI or onboard flash, which  
    // would need to be disabled first by editing uEnv.txt and rebooting.  
    exclusive-use =  
-      "P8.15", "P8.16", "P9.24", "P9.25", "P8.11", "P8.12", "P9.17", "P9.18", "P9.41A", "P9.42A", "P9.41B", "P9.42B", "pru0";  
+      "P8.15", "P8.16", "P9.24", "P9.25", "P8.11", "P8.12", "P9.17", "P9.18", "P9.39", "P9.40", "P9.37", "P9.38", "P9.33", "P9.36", "P9.35", "P9.41A", "P9.42A", "P9.41B", "P9.42B", "pru0";  
    
    fragment@0 {  
     target = <&am33xx_pinmux>;  
@@ -114,4 +117,17 @@
       clock-frequency = <100000>;
     };
   };
+  
+     fragment@4 {
+       target = <&tscadc>;
+       __overlay__ {
+          status = "okay";
+          adc{
+         				ti,adc-channels = <0 1 2 3 4 5 6 7>;
+         				ti,chan-step-avg = <16 16 16 16 16 16 16 16>;
+         				ti,chan-step-opendelay = <0x98 0x98 0x98 0x98 0x98 0x98 0x98 0x98>;
+         				ti,chan-step-sampledelay = <0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0>;
+          };
+       };
+    };
 }; 

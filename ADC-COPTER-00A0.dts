@@ -1,0 +1,64 @@
+// This DTS overlay sets up four input and four output pins for use by  
+ // PRU0 via its Enhanced GPIO mode 
+ // Inputs for signals from receiver are:
+ // BB_Header	Register bit	DT Offset	Pinmux mode
+ // P8_15 	R31 bit 15	0x03C		Mode_6
+ // P8_16 	R31 bit 14	0x038		Mode_6
+ // P9_24 	R31 bit 16	0x184		Mode_6
+ // P9_25 	R31 bit 7	0x1AC		Mode_6
+
+ // Outputs, which are references to ESCs are:
+ // BB_Header	Register bit	DT Offset	Pinmux mode
+ // P9_42	R30 bit 4	  0x1A8		Mode_5
+ // P9_41 R30 bit 6   0x1A0  Mode_5
+ // P8_12	R30 bit 14 	0x030		Mode_6
+ // P8_13	R30 bit 15 	0x034		Mode_6
+   
+ // Save this file wherever you want (but I recommend /lib/firmware), as  
+ // "PRU-COPTER-00A0.dts".
+   
+ // Compile with:
+ // dtc -O dtb -I dts -o /lib/firmware/ADC-COPTER-00A0.dtbo -b 0 -@ ADC-COPTER-00A0.dts  
+   
+ // You'll have to reboot, after which you can do this as root to activate it:  
+ // echo ADC-COPTER > /sys/devices/bone_capemgr.?/slots  
+ 
+ // Check with
+ // cat /sys/devices/bone_capemgr.9/slots
+ 
+ /dts-v1/;
+/plugin/;
+
+/ {
+	compatible = "ti,beaglebone", "ti,beaglebone-black", "ti,beaglebone-green";
+
+	// identification
+	part-number = "BB-ADC";
+	version = "00A0";
+
+	// resources this cape uses
+	exclusive-use =
+		"P9.39",		// AIN0
+		"P9.40",		// AIN1
+		"P9.37",		// AIN2
+		"P9.38",		// AIN3
+		"P9.33",		// AIN4
+		"P9.36",		// AIN5
+		"P9.35",		// AIN6
+
+		"tscadc";	// hardware ip used
+
+	fragment@0 {
+		target = <&tscadc>;
+		__overlay__ {
+
+			status = "okay";
+			adc {
+				ti,adc-channels = <0 1 2 3 4 5 6 7>;
+				ti,chan-step-avg = <16 16 16 16 16 16 16 16>;
+				ti,chan-step-opendelay = <0x98 0x98 0x98 0x98 0x98 0x98 0x98 0x98>;
+				ti,chan-step-sampledelay = <0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0>;
+			};
+		};
+	};
+};

@@ -32,7 +32,7 @@ MPU6050 mpu;
 
 
 #define ENABLE_LOGGING                  TRUE
-#define DISABLE_MOTORS                  TRUE
+#define DISABLE_MOTORS                  FALSE
 #define EXECUTION_TIME_MEASURMENTS      FALSE
 #define NUMBER_OF_CYCLES                100
 
@@ -68,8 +68,8 @@ uint8_t devStatus;      // return status after each device operation (0 = succes
 uint16_t packetSize;    // expected DMP packet size (default is 42 bytes)
 uint16_t fifoCount;     // count of all bytes currently in FIFO
 uint8_t fifoBuffer[64]; // FIFO storage buffer
-int16_t g[3];
-float gyro[3];
+int16_t g[3] = {0, 0, 0};
+float gyro[3] = {1, 1, 1};
 // orientation/motion vars
 Quaternion q;           // [w, x, y, z]         quaternion container
 VectorInt16 aa;         // [x, y, z]            accel sensor measurements
@@ -77,7 +77,7 @@ VectorInt16 aaReal;     // [x, y, z]            gravity-free accel sensor measur
 VectorInt16 aaWorld;    // [x, y, z]            world-frame accel sensor measurements
 VectorFloat gravity;    // [x, y, z]            gravity vector
 float euler[3];         // [psi, theta, phi]    Euler angle container
-float ypr[3];           // [yaw, pitch, roll]   yaw/pitch/roll container and gravity vector
+float ypr[3] = {1, 1, 1};           // [yaw, pitch, roll]   yaw/pitch/roll container and gravity vector
 
 // packet structure for InvenSense teapot demo
 uint8_t teapotPacket[14] = { '$', 0x02, 0,0, 0,0, 0,0, 0,0, 0x00, 0x00, '\r', '\n' };
@@ -123,7 +123,7 @@ void setup()
   
   pids[PID_PITCH_STAB].set_Kpid(6.5,0.1,1.2);
   pids[PID_ROLL_STAB].set_Kpid(6.5,0.1,1.2);
-  pids[PID_YAW_STAB].set_Kpid(10,0,0);
+  pids[PID_YAW_STAB].set_Kpid(1,0,0);
 
 /*
   pids[PID_PITCH_RATE].set_Kpid(0.7,1,0);
@@ -193,17 +193,17 @@ void loop () {
  long rcthr, rcyaw, rcpit, rcroll,yaw, pitch, roll;  // Variables to store radio in
   static float yaw_target = 0; 
   static int coutDelay = 0;
-  float gyroYaw;
-  float gyroPitch;
-  float gyroRoll;
-  float pitch_stab_output; 
-  float roll_stab_output;
-  float yaw_stab_output;
-  long pitch_output;  
-  long roll_output;  
-  long yaw_output;  
+  float gyroYaw = 0;
+  float gyroPitch = 0;
+  float gyroRoll = 0;
+  float pitch_stab_output = 0; 
+  float roll_stab_output = 0;
+  float yaw_stab_output = 0;
+  long pitch_output = 0;  
+  long roll_output = 0;  
+  long yaw_output = 0;  
   uint16_t channels[4];
-  long motor[4];
+  long motor[4] = {0, 0, 0, 0};
 
 
     if(Pru.UpdateInput())
@@ -218,10 +218,18 @@ void loop () {
     	cout << "Pru failed update" << endl;
     }
 
-  rcthr = channels[2];
-  rcyaw = map(channels[0], RC_YAW_MIN, RC_YAW_MAX, -180, 180);
-  rcpit =  -map(channels[3], RC_PIT_MIN, RC_PIT_MAX, -45, 45) - 2;	/* "-2" to compensate some shift somewhere (in remote controler?) */
-  rcroll = map(channels[1], RC_ROL_MIN, RC_ROL_MAX, -45, 45);
+  if ((channels[2] >= 0) && (channels[2] < 2100)){
+      rcthr = channels[2];
+      rcyaw = map(channels[0], RC_YAW_MIN, RC_YAW_MAX, -180, 180);
+      rcpit =  -map(channels[3], RC_PIT_MIN, RC_PIT_MAX, -45, 45) - 2;	/* "-2" to compensate some shift somewhere (in remote controler?) */
+      rcroll = map(channels[1], RC_ROL_MIN, RC_ROL_MAX, -45, 45);
+  }
+  else{
+      rcthr  = 0;
+      rcyaw  = 0;
+      rcpit  = 0;
+      rcroll = 0; 
+  }
    
   //cout<< " rcthr = " << rcthr << "\trcyaw = " << rcyaw << "\trcpitch = " << rcpit <<"\trcroll =  "<< rcroll<<endl;
 ////////////////////////////////////// MPU START ///////////////////////////////////////
@@ -378,7 +386,7 @@ gyroYaw=gyro[0];   gyroPitch=gyro[1]; gyroRoll=-gyro[2];
   logData += "\t";
   logData += to_string(roll_output); 
   logData += "\t";
-  logData += to_string(rcyaw);  
+  logData += to_string(yaw_target);  
   logData += "\t";
   logData += to_string(gyroYaw);  
   logData += "\t";
@@ -397,6 +405,7 @@ gyroYaw=gyro[0];   gyroPitch=gyro[1]; gyroRoll=-gyro[2];
   logData += to_string(motor[MOTOR_BL]);
   logData += "\n"; 
   
+  logCnt++;
   logFile << logData;
 #endif
 }
@@ -431,7 +440,7 @@ int main(void)
     time (&rawtime);
     timeinfo = localtime(&rawtime);
 
-    strftime(buffer,sizeof(buffer),"%d.%m.%Y %H-%M-%S",timeinfo);
+    strftime(buffer,sizeof(buffer),"%Y.%m.%d %H-%M-%S",timeinfo);
     titleLenght = strlen(buffer);
     buffer[titleLenght] = '.';
     buffer[titleLenght + 1] = 't';
