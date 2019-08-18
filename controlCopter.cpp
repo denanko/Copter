@@ -31,10 +31,11 @@ MPU6050 mpu;
 #include "PruProxy.h"
 
 
+#define ENABLE_VOLT_MONITOR             TRUE
 #define ENABLE_LOGGING                  TRUE
 #define DISABLE_MOTORS                  FALSE
 #define EXECUTION_TIME_MEASURMENTS      FALSE
-#define NUMBER_OF_CYCLES                100
+#define NUMBER_OF_CYCLES                1000
 
 // ******************
 // rc functions
@@ -413,6 +414,11 @@ gyroYaw=gyro[0];   gyroPitch=gyro[1]; gyroRoll=-gyro[2];
 
 int main(void)
 {
+    #if ENABLE_VOLT_MONITOR
+        int VoltMonCounter = 0;
+        char value_str[7];
+        long int value_int = 0;
+    #endif
     int LoopCounter = 0;
 	cout<<"start"<<endl;	
 	
@@ -429,7 +435,10 @@ int main(void)
     	
 	setup();
 	
-	  
+	#if ENABLE_VOLT_MONITOR
+	    FILE* f0 = fopen("/sys/bus/iio/devices/iio:device0/in_voltage0_raw", "r");
+    #endif 
+      
 #if ENABLE_LOGGING == TRUE
     string location = "Logs//";
     time_t rawtime;
@@ -470,6 +479,21 @@ int main(void)
 	#else
 		loop();
 	#endif
+	
+	#if ENABLE_VOLT_MONITOR
+    	if (VoltMonCounter == 100){
+	        VoltMonCounter = 0;
+	        ifstream f0("/sys/bus/iio/devices/iio:device0/in_voltage0_raw");
+	        f0.read(value_str, 6);
+            value_int = strtol(value_str,NULL,0);
+        //    printf("0 %li\n", value_int);
+            f0.close();
+	    }
+	    else{
+	        VoltMonCounter++;
+	    }
+	#endif
+	
 		usleep(10);
 #if EXECUTION_TIME_MEASURMENTS == TRUE			
 		LoopCounter++;
