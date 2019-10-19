@@ -16,6 +16,11 @@
 #include <ctime>
 #include <fstream>					// Include this to use file streams
 
+
+#include <unistd.h>
+#include <linux/reboot.h>
+#include <sys/reboot.h>
+
 using namespace std;
 using namespace std::chrono;
 
@@ -36,6 +41,9 @@ MPU6050 mpu;
 #define DISABLE_MOTORS                  FALSE
 #define EXECUTION_TIME_MEASURMENTS      FALSE
 #define NUMBER_OF_CYCLES                1000
+
+
+#define NUMBER_OF_ADC_READS             3
 
 // ******************
 // rc functions
@@ -82,6 +90,9 @@ float ypr[3] = {1, 1, 1};           // [yaw, pitch, roll]   yaw/pitch/roll conta
 
 // packet structure for InvenSense teapot demo
 uint8_t teapotPacket[14] = { '$', 0x02, 0,0, 0,0, 0,0, 0,0, 0x00, 0x00, '\r', '\n' };
+
+// Condition to power down PCB
+bool PowerDownCondition = FALSE;
 
 
 
@@ -173,8 +184,51 @@ void setup()
         // (if it's going to break, usually the code will be 1)
         printf("DMP Initialization failed (code %d)\n", devStatus);
     }
-	
 /////////////////////////MPU OVER /////////////////////////////////
+
+    /* Check "power" switch state */
+    int valueADC[NUMBER_OF_ADC_READS];
+    bool AdcDataInconsistent = FALSE;
+    char value_str[7];
+    
+    ifstream ADC_CH1("/sys/bus/iio/devices/iio:device0/in_voltage1_raw");
+    
+    for (int i = 0; i < NUMBER_OF_ADC_READS; i++){
+        ADC_CH1.read(value_str, 6);
+        valueADC[i] = strtol(value_str,NULL,0);
+        usleep(100);
+    }
+    ADC_CH1.close();
+    
+    if (valueADC[0] < 2500){
+        /* Power switch should read High or Low level only */
+        for (int i = 0; i < NUMBER_OF_ADC_READS; i++){
+            /* Check that all read are the same */
+            if (valueADC[i] > 2500){
+                AdcDataInconsistent = TRUE;
+            }
+        }
+        if (AdcDataInconsistent == FALSE){
+            /* Mark oposite to current switch state for power down condition */
+            PowerDownCondition = 1;
+        }
+        else{
+           return; 
+        }
+    }
+    else{
+        for (int i = 0; i < NUMBER_OF_ADC_READS; i++){
+            if (valueADC[i] < 2500){
+                AdcDataInconsistent = TRUE;
+            }
+        } 
+        if (AdcDataInconsistent == FALSE){
+            PowerDownCondition = 0;
+        }
+        else{
+           return; 
+        }
+    }
 }
 
 
@@ -417,9 +471,19 @@ int main(void)
     #if ENABLE_VOLT_MONITOR
         int VoltMonCounter = 0;
         char value_str[7];
-        long int value_int = 0;
+        long int value_int  = 0;
     #endif
     int LoopCounter = 0;
+    
+    long int valueADC1[NUMBER_OF_ADC_READS];
+    int AdcBufferPointer = 0;
+    bool PowerDown = FALSE;
+    
+    for (int i = 0; i < NUMBER_OF_ADC_READS; i++){
+        valueADC1[i] = 2500;
+    }
+    
+    
 	cout<<"start"<<endl;	
 	
 	cout << "setup " << endl;
@@ -445,6 +509,7 @@ int main(void)
     struct tm * timeinfo;
     char buffer[80];
     int titleLenght = 0;
+    bool bNewFileCreated = FALSE;
 
     time (&rawtime);
     timeinfo = localtime(&rawtime);
@@ -456,10 +521,35 @@ int main(void)
     buffer[titleLenght + 2] = 'x';
     buffer[titleLenght + 3] = 't';
     buffer[titleLenght + 4] = '\0';
-    string title = buffer;
-	string outString = "";
+	
+	string title = buffer;
+	
+	int fileNum = 0;
+	while(bNewFileCreated != TRUE){
+	    ifstream infile(location + title); 
+	    if (infile.good() == TRUE){
+	        // If file exist add some number to name 
+	        fileNum++;
+    	    buffer[titleLenght]     = '_';
+    	    sprintf(&buffer[titleLenght + 1], "%d", fileNum);
+            titleLenght = strlen(buffer);
+    	    buffer[titleLenght]     = '.';
+            buffer[titleLenght + 1] = 't';
+            buffer[titleLenght + 2] = 'x';
+            buffer[titleLenght + 3] = 't';
+            buffer[titleLenght + 4] = '\0';
+            
+            title = buffer;
+	    }
+	    else{
+	        bNewFileCreated = TRUE;
+	    }
+	}
+	
+	title = buffer;
 	ofstream fout(location + title);
 	
+	string outString = "";
 	outString = "t\trcthr\trcpit\tgyropit\tintpit\tstabpit\tpitout\trcroll\tgyroroll\tintroll\tstabroll\trollout\trcyaw\tgyroyaw\tintyaw\tstabyaw\tyawout\tFR\tFL\tBR\tBL\n";
     fout << outString;
 #endif
@@ -481,17 +571,37 @@ int main(void)
 	#endif
 	
 	#if ENABLE_VOLT_MONITOR
-    	if (VoltMonCounter == 100){
-	        VoltMonCounter = 0;
-	        ifstream f0("/sys/bus/iio/devices/iio:device0/in_voltage0_raw");
-	        f0.read(value_str, 6);
-            value_int = strtol(value_str,NULL,0);
-        //    printf("0 %li\n", value_int);
-            f0.close();
-	    }
-	    else{
-	        VoltMonCounter++;
-	    }
+        ifstream f0("/sys/bus/iio/devices/iio:device0/in_voltage0_raw");
+        f0.read(value_str, 6);
+        value_int = strtol(value_str,NULL,0);
+        f0.close();
+        
+        ifstream f1("/sys/bus/iio/devices/iio:device0/in_voltage1_raw");
+        f1.read(value_str, 6);
+        valueADC1[AdcBufferPointer] = strtol(value_str,NULL,0);
+        f1.close();
+        
+        if (AdcBufferPointer >= NUMBER_OF_ADC_READS){
+            PowerDown = TRUE;
+            for (int i = 0; i < NUMBER_OF_ADC_READS; i++){
+                if ((PowerDownCondition == 1) && (valueADC1[i] < 2500)){
+                    PowerDown = FALSE;
+                }
+                if ((PowerDownCondition == 0) && (valueADC1[i] > 2500)){
+                    PowerDown = FALSE;
+                }
+            }
+            AdcBufferPointer = 0;
+        }
+        else{
+           AdcBufferPointer++; 
+        }
+
+        
+        if ((value_int < 2900) || (PowerDown == TRUE)){
+           fout.close();
+           return 0;
+        }
 	#endif
 	
 		usleep(10);
