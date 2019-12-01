@@ -131,7 +131,7 @@ void setup()
 
  pids[PID_PITCH_RATE].set_Kpid(0.5,0.003,0.09);
   pids[PID_ROLL_RATE].set_Kpid(0.5,0.003,0.09);
-  pids[PID_YAW_RATE].set_Kpid(2.7,1,0);
+  pids[PID_YAW_RATE].set_Kpid(2.7,0,0);
   
   pids[PID_PITCH_STAB].set_Kpid(6.5,0.1,1.2);
   pids[PID_ROLL_STAB].set_Kpid(6.5,0.1,1.2);
@@ -338,7 +338,7 @@ gyroYaw=gyro[0];   gyroPitch=gyro[1]; gyroRoll=-gyro[2];
 // Do the magic
   if(rcthr > RC_THR_MIN + 50) {  // Throttle raised, turn on stablisation.
     // Stablise PIDS
-    pitch_stab_output = pids[PID_PITCH_STAB].update_pid_std((float)rcpit, pitch, 1); 
+    pitch_stab_output = pids[PID_PITCH_STAB].update_pid_std((float)rcpit, pitch, 1);    // use float instead of long for pitch, roll, yaw??
     roll_stab_output = pids[PID_ROLL_STAB].update_pid_std((float)rcroll, roll, 1);
     yaw_stab_output = pids[PID_YAW_STAB].update_pid_std(yaw_target, yaw, 1);
   
@@ -386,9 +386,8 @@ gyroYaw=gyro[0];   gyroPitch=gyro[1]; gyroRoll=-gyro[2];
 	Pru.Output3 = motor[MOTOR_BR]*200;
 	Pru.Output4 = motor[MOTOR_FR]*200;
 	Pru.UpdateOutput();
-       
-    // reset yaw target so we maintain this on takeoff
-    yaw_target = yaw;
+	
+	yaw_target = yaw;
   }
   
   
@@ -406,11 +405,12 @@ gyroYaw=gyro[0];   gyroPitch=gyro[1]; gyroRoll=-gyro[2];
      // printf("\tpit_st-> %3.2f;\troll_st-> %3.2f\tpitch_out-> %3d\troll_out-> %3d\n", pitch_stab_output, roll_stab_output, pitch_output, roll_output);
      
        /* Stabilizer debug */
-/*      printf("rcpit: %2d;\tpit_int: %3.2f;\tpit_stab: %3.2f;\tpit_gyro: %3.2f;\tpit_out: %2d\n", rcpit,  ypr[1], pitch_stab_output, gyroPitch, pitch_output);
-      printf("rcroll:%2d\troll_int: %3.2f;\troll_stab: %3.2f;\troll_gyro: %3.2f;\troll_out: %2d\n", rcroll, ypr[2], roll_stab_output, gyroRoll, roll_output);
-      printf("rcthr: %4d\tyaw_out: %4d\tFL: %4d;\tFR: %4d;\tBL: %4d;\tBR: %4d;\n\n",rcthr, yaw_output, motor[MOTOR_FL], motor[MOTOR_FR], motor[MOTOR_BL], motor[MOTOR_BR]);
-      
-      coutDelay = 0;
+     // printf("rcpit: %2d;\tpit_int: %3.2f;\tpit_stab: %3.2f;\tpit_gyro: %3.2f;\tpit_out: %2d\n", rcpit,  ypr[1], pitch_stab_output, gyroPitch, pitch_output);
+     // printf("rcroll:%2d\troll_int: %3.2f;\troll_stab: %3.2f;\troll_gyro: %3.2f;\troll_out: %2d\n", rcroll, ypr[2], roll_stab_output, gyroRoll, roll_output);
+      //printf("rcyaw: %4d\tyaw_target: %3.2f\tyaw_stab_output: %3.2f;\tyaw_output: %4d;\n",rcyaw, yaw_target, yaw_stab_output, yaw_output);
+      //printf("yaw: %4d\tpitch: %4d\troll: %4d;\n",yaw, pitch, roll);
+       
+/*      coutDelay = 0;
   }
   else{
       coutDelay++;
