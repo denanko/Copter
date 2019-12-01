@@ -360,16 +360,16 @@ gyroYaw=gyro[0];   gyroPitch=gyro[1]; gyroRoll=-gyro[2];
     }
     
     // rate PIDS
-    thrKoeff = (rcthr - RC_THR_MIN) / RC_THR_MIN;
+    thrKoeff = 1;//(rcthr - RC_THR_MIN) / RC_THR_MIN;
     pitch_output =  (long) (pids[PID_PITCH_RATE].update_pid_std(pitch_stab_output, gyroPitch, 1) * thrKoeff);  
     roll_output =  (long) (pids[PID_ROLL_RATE].update_pid_std(roll_stab_output, gyroRoll, 1) * thrKoeff);  
     yaw_output =  (long) (pids[PID_YAW_RATE].update_pid_std(yaw_stab_output, gyroYaw, 1) * thrKoeff);  
 
     // mix pid outputs and send to the motors.
-    motor[MOTOR_FL] = rcthr + (roll_output >> 1) + (pitch_output >> 1) - yaw_output;
-    motor[MOTOR_BL] = rcthr + (roll_output >> 1) - (pitch_output >> 1) + yaw_output;
-    motor[MOTOR_FR] = rcthr - (roll_output >> 1) + (pitch_output >> 1) + yaw_output;
-    motor[MOTOR_BR] = rcthr - (roll_output >> 1) - (pitch_output >> 1) - yaw_output;
+    motor[MOTOR_FL] = rcthr + (roll_output) + (pitch_output) - yaw_output;
+    motor[MOTOR_BL] = rcthr + (roll_output) - (pitch_output) + yaw_output;
+    motor[MOTOR_FR] = rcthr - (roll_output) + (pitch_output) + yaw_output;
+    motor[MOTOR_BR] = rcthr - (roll_output) - (pitch_output) - yaw_output;
 
 	
 #if DISABLE_MOTORS == TRUE
@@ -542,9 +542,12 @@ int main(void)
 	    if (infile.good() == TRUE){
 	        // If file exist add some number to name 
 	        fileNum++;
-	        for (int i = 0; buffer[i] != '_'; ++i){
-        	    titleLenght = i;
+	        for (int i = 0; buffer[i]; i++){
+	            if (buffer[i] == '_'){
+	                titleLenght = i;
+	            }
 	        }
+    	    buffer[titleLenght]     = '_';
     	    sprintf(&buffer[titleLenght + 1], "%d", fileNum);
             titleLenght = strlen(buffer);
     	    buffer[titleLenght]     = '.';
