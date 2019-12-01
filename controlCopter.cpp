@@ -131,11 +131,21 @@ void setup()
 
  pids[PID_PITCH_RATE].set_Kpid(0.5,0.003,0.09);
   pids[PID_ROLL_RATE].set_Kpid(0.5,0.003,0.09);
+  pids[PID_YAW_RATE].set_Kpid(1,0,0);
+  
+  pids[PID_PITCH_STAB].set_Kpid(6.5,0,0);
+  pids[PID_ROLL_STAB].set_Kpid(6.5,0.1,1.2);
+  pids[PID_YAW_STAB].set_Kpid(0.5,0,0);
+  
+  /* Original
+   pids[PID_PITCH_RATE].set_Kpid(0.5,0.003,0.09);
+  pids[PID_ROLL_RATE].set_Kpid(0.5,0.003,0.09);
   pids[PID_YAW_RATE].set_Kpid(2.7,0,0);
   
   pids[PID_PITCH_STAB].set_Kpid(6.5,0.1,1.2);
   pids[PID_ROLL_STAB].set_Kpid(6.5,0.1,1.2);
   pids[PID_YAW_STAB].set_Kpid(1,0,0);
+  */
 
 /*
   pids[PID_PITCH_RATE].set_Kpid(0.7,1,0);
