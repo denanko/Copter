@@ -347,7 +347,7 @@ gyroYaw=gyro[0];   gyroPitch=gyro[1]; gyroRoll=-gyro[2];
 
 
 // Do the magic
-  if(rcthr > RC_THR_MIN + 50) {  // Throttle raised, turn on stablisation.
+  if(rcthr > RC_THR_MIN + 10) {  // Throttle raised, turn on stablisation.
     // Stablise PIDS
     pitch_stab_output = pids[PID_PITCH_STAB].update_pid_std((float)rcpit, pitch, 1);    // use float instead of long for pitch, roll, yaw??
     roll_stab_output = pids[PID_ROLL_STAB].update_pid_std((float)rcroll, roll, 1);
@@ -366,10 +366,10 @@ gyroYaw=gyro[0];   gyroPitch=gyro[1]; gyroRoll=-gyro[2];
     yaw_output =  (long) (pids[PID_YAW_RATE].update_pid_std(yaw_stab_output, gyroYaw, 1) * thrKoeff);  
 
     // mix pid outputs and send to the motors.
-    motor[MOTOR_FL] = rcthr + (roll_output) + (pitch_output) - yaw_output;
-    motor[MOTOR_BL] = rcthr + (roll_output) - (pitch_output) + yaw_output;
-    motor[MOTOR_FR] = rcthr - (roll_output) + (pitch_output) + yaw_output;
-    motor[MOTOR_BR] = rcthr - (roll_output) - (pitch_output) - yaw_output;
+    motor[MOTOR_FL] = rcthr;// + (roll_output) + (pitch_output) - yaw_output;
+    motor[MOTOR_BL] = rcthr;// + (roll_output) - (pitch_output) + yaw_output;
+    motor[MOTOR_FR] = rcthr;// - (roll_output) + (pitch_output) + yaw_output;
+    motor[MOTOR_BR] = rcthr;// - (roll_output) - (pitch_output) - yaw_output;
 
 	
 #if DISABLE_MOTORS == TRUE

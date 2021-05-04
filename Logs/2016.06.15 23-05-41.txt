@@ -1,0 +1,2 @@
+t	rcthr	rcpit	gyropit	intpit	stabpit	pitout	rcroll	gyroroll	introll	stabroll	rollout	rcyaw	gyroyaw	intyaw	stabyaw	yawout	FR	FL	BR	BL
+0	1000	0	0.000000	4.805859	0.000000	0	0	-0.030488	-3.024826	0.000000	0	0.000000	-0.030488	0.162517	0.000000	0	1000	1000	1000	1000
