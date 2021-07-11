@@ -18,6 +18,7 @@
  // "PRU-COPTER-00A0.dts".
    
  // Compile with:
+ // dtc -O dtb -I dts -o /home/den/repos/busybox/_install/boot/am335x-boneblack.dtbo -b 0 -@ PRU-COPTER-00A0.dts
  // dtc -O dtb -I dts -o /lib/firmware/PRU-COPTER-00A0.dtbo -b 0 -@ PRU-COPTER-00A0.dts  
    
  // You'll have to reboot, after which you can do this as root to activate it:  

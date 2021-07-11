@@ -8,8 +8,8 @@
 #include <errno.h>
 #include <unistd.h>
 #include <string.h>
-#include <prussdrv.h>  
-#include <pruss_intc_mapping.h>  
+#include "prussdrv.h" 
+#include "pruss_intc_mapping.h" 
 
 #include "PruProxy.h"
 
